@@ -1,10 +1,10 @@
 "use client"
 import Image from "next/image"
-import { Button, CardBody, TextButton, TextPromo, Title, TitlePreco } from "./style"
-import { IProduto } from "@/interfaces"
+import { Button, CardBody, TextButton, TextStatus, Title, TitleTipo} from "./style"
+import { ISala } from "@/interfaces"
 import { useRouter } from "next/navigation"
 
-export const Card = (props: IProduto) => {
+export const Card = (props: ISala) => {
 
     const router = useRouter()
 
@@ -20,11 +20,11 @@ export const Card = (props: IProduto) => {
                 height={200}
             />
             <Title>{props.nome}</Title>
-            <TitlePreco>{props.valor}</TitlePreco>
-            <TextPromo>{props.promo}</TextPromo>
+            <TitleTipo>{props.tipo}</TitleTipo>
+            <TextStatus status={props.status}>{props.status}</TextStatus>
             <Button
                 onClick={() => {
-                    router.push('/produto/'+props.id)
+                    router.push('/sala/'+props.id)
                 }}
             >
                 <TextButton>Detalhes</TextButton>

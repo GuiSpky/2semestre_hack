@@ -1,3 +1,5 @@
+
+
 'use client';
 import styled from 'styled-components'
 
@@ -13,12 +15,6 @@ export const CardBody = styled.div`
 `
 export const Title = styled.h3``
 
-export const TitlePreco = styled.p`
-  text-decoration: line-through;
-`
-export const TextPromo = styled.strong`
-  color: var(--red);
-`
 export const Button = styled.button`
   border: 0;
   padding: 15px;
@@ -32,3 +28,28 @@ export const Button = styled.button`
 export const TextButton = styled.h3`
   color: var(--white);
 `
+export const TitleTipo = styled.h3`
+  font-size: 1rem;
+  color: #0000ff;
+  margin-top: 5px;
+  text-transform: capitalize; /* Ajusta o texto para capitalizar a primeira letra */
+`;
+
+export const TextStatus = styled.p<{ status: string }>` /* Tipo explícito da prop */
+  font-size: 0.9rem;
+  color: ${({ status }) => {
+    switch (status.toLowerCase()) { /* Verifica o status ignorando o case */
+      case "disponível":
+        return "#4caf50"; /* Verde */
+      case "reservado":
+        return "#ff9800"; /* Laranja */
+      case "em manutenção":
+        return "#f44336"; /* Vermelho */
+      default:
+        return "#000"; /* Cor padrão (preto) */
+    }
+  }};
+  margin: 5px 0;
+  font-weight: bold;
+  text-transform: capitalize; /* Capitaliza a primeira letra do status */
+`;

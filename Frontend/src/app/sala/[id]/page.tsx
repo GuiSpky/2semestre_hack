@@ -1,28 +1,29 @@
-'use client'
+"use client";
+
 import { Menu } from "@/components/Menu"
-import { IProduto } from "@/interfaces"
-import axios from "axios"
+import { ISala } from "@/interfaces";
+import axios from "axios";
 import { useEffect, useState } from "react"
 import { Button, Col4, Col6, Input, Row, TextButton } from "./style"
 
-export default function Produto(
-    { params }: { params: { id: string } }
+export default function Sala(
+  { params }: { params: { id: string } }
 ) {
 
-    const [produto, setProduto] = useState<IProduto>()
+  const [sala, setSala] = useState<ISala>()
 
     useEffect(() => {
 
-        console.log(process.env.NEXT_PUBLIC_API_URL + '/produtos')
-        axios.get(process.env.NEXT_PUBLIC_API_URL + '/produtos',
+        console.log(process.env.NEXT_PUBLIC_API_URL + '/salas')
+        axios.get(process.env.NEXT_PUBLIC_API_URL + '/salas',
             {
-                // /produtos?id=132
+                // /salas?id=132
                 params: {
                     id: params.id
                 }
             }
         ).then((dados) => {
-            setProduto(dados.data[0])
+            setSala(dados.data[0])
         }).catch((erro) => {
             console.log('erro')
             console.log(erro)
@@ -42,9 +43,9 @@ export default function Produto(
                 }}
             >
                 {
-                    produto ?
+                    sala ?
                         <>
-                            <h1>Produto</h1>
+                            <h1>Sala</h1>
                             <Row>
                                 <Col4>
                                     <img
@@ -54,18 +55,18 @@ export default function Produto(
                                         src={
                                             'https://raw.githubusercontent.com/profchines/Imagens/refs/heads/main/Imagens/'
                                             +
-                                            produto.imagemg
+                                            sala.imagemg
                                         }
                                     />
                                 </Col4>
                                 <Col6>
-                                    <h3>{produto.nome}</h3>
+                                    <h3>{sala.nome}</h3>
                                     <p
                                         style={{
                                             textDecoration: 'line-through'
                                         }}
                                     >
-                                        R$ {produto.valor}
+                                        R$ {sala.tipo}
                                     </p>
                                     <p
                                         style={{
@@ -73,7 +74,7 @@ export default function Produto(
                                             fontWeight: 'bold'
                                         }}
                                     >
-                                        R$ {produto.promo}
+                                        R$ {sala.status}
                                     </p>
 
                                     <form>
@@ -96,10 +97,11 @@ export default function Produto(
                             </Row>
                         </>
                         :
-                        <h2>Nenhum produto encontrado :/</h2>
+                        <h2>Nenhum sala encontrado :/</h2>
                 }
 
             </div>
         </>
     )
+
 }

@@ -1,3 +1,5 @@
+import { Footer } from "@/components/Footer";
+import { Menu } from "@/components/Menu";
 import StyledComponentsRegistry from "@/lib/registry";
 import { GlobalStyle } from "@/styles/global";
 import type { Metadata } from "next";
@@ -19,6 +21,7 @@ export default function RootLayout({
         <StyledComponentsRegistry>
           <GlobalStyle />
           {children}
+          <Footer /> {/* Adicionando o Footer aqui */}
         </StyledComponentsRegistry>
       </body>
     </html>
