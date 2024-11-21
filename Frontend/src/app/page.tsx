@@ -1,25 +1,23 @@
 import { Card } from "@/components/Card";
 import { Menu } from "@/components/Menu";
-import { Footer } from "@/components/Footer";
-import { IProduto } from "@/interfaces";
+import { ISala } from "@/interfaces";
 import axios from "axios";
 
-interface IReqProduto {
-  data: Array<IProduto>
+interface IReqSala {
+  data: Array<ISala>
 }
 
 export default async function Home() {
 
-  const { data }: IReqProduto = await axios.get(
+  const { data }: IReqSala = await axios.get(
     process.env.NEXT_PUBLIC_API_URL
     +
-    '/produtos'
+    '/salas'
   )
 
   return (
     <>
       <Menu />
-
       <div
         style={{
           paddingLeft: '6%',
@@ -35,15 +33,15 @@ export default async function Home() {
           }}
         >
           {
-            data.map((produto) => (
+            data.map((sala) => (
               <Card
-                key={produto.id}
-                id={produto.id}
-                id_categoria={produto.id_categoria}
-                imagemg={produto.imagemg}
-                nome={produto.nome}
-                valor={produto.valor}
-                promo={produto.promo}
+                key={sala.id}
+                id={sala.id}
+                imagemg={sala.imagemg}
+                nome={sala.nome}
+                descricao={sala.descricao}
+                status={sala.status}
+                tipo={sala.tipo}
               />
             ))
           }
@@ -58,9 +56,8 @@ export default async function Home() {
         </div>
         
       </div>
-
-      <Footer />
     </>
     
   );
 }
+
