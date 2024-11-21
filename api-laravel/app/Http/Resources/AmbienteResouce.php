@@ -15,8 +15,7 @@ class AmbienteResouce extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
-            'name'=> $this->name,
+            'nome'=> $this->nome,
             'tipo'=> $this->tipo,
             'descricao'=> $this->descricao,
             'status'=> $this->status

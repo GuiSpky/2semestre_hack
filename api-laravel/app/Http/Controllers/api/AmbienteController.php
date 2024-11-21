@@ -23,7 +23,10 @@ class AmbienteController extends Controller
      */
     public function store(Request $request)
     {
-        $dados = Ambientes::create($request);
+        $dados = $request->only(["nome","tipo","descricao","status"]);
+        // dd($dados);
+
+        Ambientes::create($dados);
         return new AmbienteResouce($dados);
     }
 
