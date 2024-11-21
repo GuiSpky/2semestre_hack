@@ -45,6 +45,9 @@ class AmbienteController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $ambiente = AmbienteResouce::find($id);
+        $ambiente-> destroy();
+
+
     }
 }
