@@ -12,6 +12,8 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::apiResource('ambientes', AmbienteController::class);
+Route::delete('/ambientes/deletar/{id}', [AmbienteController::class, 'destroy']);
+
 Route::apiResource('historicos', HistoricosController::class);
 Route::apiResource('notificacoes', NotificacoesController::class);
 Route::apiResource('reservas', ReservasController::class);

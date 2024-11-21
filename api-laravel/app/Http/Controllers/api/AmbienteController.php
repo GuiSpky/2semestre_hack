@@ -48,9 +48,14 @@ class AmbienteController extends Controller
      */
     public function destroy(string $id)
     {
-        $ambiente = AmbienteResouce::find($id);
-        $ambiente-> destroy();
+        $ambiente = Ambientes::findOrFail($id); // Encontra o recurso ou lança um erro 404
 
+        // Exclui o ambiente
+        $ambiente->delete();
 
+        // Retorna apenas uma mensagem de sucesso
+        return response()->json([
+            'message' => 'Ambiente deletado com sucesso.',
+        ], 200);
     }
 }
