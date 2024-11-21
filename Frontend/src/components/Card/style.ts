@@ -19,7 +19,7 @@ export const Button = styled.button`
   border: 0;
   padding: 15px;
   border-radius: 8px;
-  background-color: var(--red);
+  background-color: var(--black);
   :hover {
     filter: brightness(1.3);
   }
@@ -36,7 +36,7 @@ export const TitleTipo = styled.h3`
 `;
 
 export const TextStatus = styled.p<{ status: string }>` /* Tipo explícito da prop */
-  font-size: 0.9rem;
+  font-size: 1.0rem;
   color: ${({ status }) => {
     switch (status.toLowerCase()) { /* Verifica o status ignorando o case */
       case "disponível":

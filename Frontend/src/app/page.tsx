@@ -22,9 +22,10 @@ export default async function Home() {
         style={{
           paddingLeft: '6%',
           paddingRight: '6%',
+          textAlign: 'center'
         }}
       >
-        <h2>Ambientes</h2>
+        <h1>Ambientes</h1>
         <div
           style={{
             display: 'flex',

@@ -52,11 +52,7 @@ export default function Sala(
                                         style={{
                                             width: '100%'
                                         }}
-                                        src={
-                                            'https://raw.githubusercontent.com/profchines/Imagens/refs/heads/main/Imagens/'
-                                            +
-                                            sala.imagemg
-                                        }
+                                        src={`/imagens/${sala.imagemg}`}
                                     />
                                 </Col4>
                                 <Col6>

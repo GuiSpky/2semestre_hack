@@ -48,7 +48,13 @@ export const Menu = () => {
               <NavbarLink
                 href={"/"}
               >
-                Home
+                Ambientes
+              </NavbarLink>
+
+              <NavbarLink
+                href={"/reserva"}
+              >
+                Reserva
               </NavbarLink>
 
               {
@@ -66,9 +72,9 @@ export const Menu = () => {
           </LeftContainer>
           <RightContainer>
             <NavbarLinkExtended
-              href={'/carrinho'}
+              href={'/register'}
             >
-              Car
+              Perfil
             </NavbarLinkExtended>
           </RightContainer>
         </NavbarInnerContainer>

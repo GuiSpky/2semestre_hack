@@ -11,10 +11,7 @@ export const Card = (props: ISala) => {
     return (
         <CardBody>
             <Image
-                src={
-                    'https://raw.githubusercontent.com/profchines/Imagens/refs/heads/main/Imagens/'
-                    + props.imagemg
-                }
+                src={`/imagens/${props.imagemg}`}
                 alt={props.nome}
                 width={250}
                 height={200}

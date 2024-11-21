@@ -10,6 +10,8 @@ export const FooterContainer = styled.footer`
   bottom: 0;
   width: 100%;
   box-shadow: 0px -2px 10px rgba(0, 0, 0, 0.2);
+  position: fixed;
+  
 `;
 
 export const FooterText = styled.p`
