@@ -35,12 +35,18 @@ class AmbienteController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $ambiente = AmbienteResouce::find($id);
-        $dados = $request;
+        $ambiente = Ambientes::findOrFail($id);
 
-        $ambiente-> update([$dados]);
+        $ambiente->update([
+            "nome"=>$request->nome,
+	        "descricao"=>$request->descricao,
+	        "tipo"=>$request->tipo,
+	        "status"=>$request->status
+        ]);
 
-        return new AmbienteResouce($dados);
+        $ambiente = Ambientes::findOrFail($id);
+
+        return new AmbienteResouce($ambiente);
     }
 
     /**

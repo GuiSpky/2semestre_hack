@@ -13,6 +13,7 @@ Route::get('/user', function (Request $request) {
 
 Route::apiResource('ambientes', AmbienteController::class);
 Route::delete('/ambientes/deletar/{id}', [AmbienteController::class, 'destroy']);
+Route::put('/ambientes/{id}', [AmbienteController::class, 'update']);
 
 Route::apiResource('historicos', HistoricosController::class);
 Route::apiResource('notificacoes', NotificacoesController::class);
