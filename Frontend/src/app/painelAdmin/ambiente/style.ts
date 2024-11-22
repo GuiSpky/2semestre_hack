@@ -1,5 +1,27 @@
 import styled from 'styled-components';
 
+export const DeleteButton = styled.button`
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  margin-left: 10px;
+  cursor: pointer;
+  font-size: 14px;
+
+  &:hover {
+    background-color: darkred;
+  }
+`;
+
+
+export const ErrorMessage = styled.p`
+  color: red;
+  font-size: 14px;
+  margin-top: 10px;
+`;
+
+
 export const AdminContainer = styled.div`
   max-width: 1200px;
   margin: 0 auto;

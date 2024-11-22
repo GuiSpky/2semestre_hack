@@ -12,19 +12,29 @@ import {
   AmbientList,
   ReportsInfo,
   ReportsButton,
-  UpdateButton // Adicionamos o botão de atualização
+  UpdateButton, // Adicionamos o botão de atualização
+  ErrorMessage, // Estilo para a mensagem de erro
+  DeleteButton // Estilo para o botão de excluir
 } from './style'; // Corrigindo o caminho para importar do 'style.ts'
 
 const Admin = () => {
   const [ambientName, setAmbientName] = useState<string>(''); // Nome do novo ambiente ou ambiente a ser alterado
   const [ambientList, setAmbientList] = useState<string[]>([]); // Lista de ambientes
   const [selectedAmbient, setSelectedAmbient] = useState<string | null>(null); // Ambiente selecionado para edição
+  const [error, setError] = useState<string | null>(null); // Mensagem de erro para duplicação
 
   // Função para criar novo ambiente
   const handleCreateAmbient = () => {
+    // Verifica se o nome do ambiente já existe na lista
+    if (ambientList.includes(ambientName)) {
+      setError('Já existe um ambiente com esse nome.');
+      return;
+    }
+
     if (ambientName) {
       setAmbientList([...ambientList, ambientName]);
       setAmbientName('');
+      setError(null); // Limpa a mensagem de erro, caso haja
     }
   };
 
@@ -44,6 +54,15 @@ const Admin = () => {
       );
       setSelectedAmbient(null); // Limpa o ambiente selecionado
       setAmbientName(''); // Limpa o campo de entrada
+      setError(null); // Limpa qualquer mensagem de erro
+    }
+  };
+
+  // Função para excluir um ambiente
+  const handleDeleteAmbient = (ambient: string) => {
+    const confirmDelete = window.confirm(`Tem certeza que deseja excluir o ambiente "${ambient}"?`);
+    if (confirmDelete) {
+      setAmbientList(ambientList.filter((item) => item !== ambient));
     }
   };
 
@@ -63,6 +82,9 @@ const Admin = () => {
             placeholder="Nome do novo ambiente"
           />
           <CreateButton onClick={handleCreateAmbient}>Criar Novo Ambiente</CreateButton>
+          
+          {/* Exibe a mensagem de erro se o nome do ambiente for duplicado */}
+          {error && <ErrorMessage>{error}</ErrorMessage>}
         </CreateAmbient>
         
         {/* Lista de ambientes criados */}
@@ -73,6 +95,8 @@ const Admin = () => {
               ambientList.map((ambient, index) => (
                 <li key={index} onClick={() => handleSelectAmbient(ambient)}>
                   {ambient}
+                  {/* Adicionando o botão de excluir ao lado do ambiente */}
+                  <DeleteButton onClick={() => handleDeleteAmbient(ambient)}>Excluir</DeleteButton>
                 </li>
               ))
             ) : (

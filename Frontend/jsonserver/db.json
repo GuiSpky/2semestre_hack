@@ -2,30 +2,30 @@
   "salas": [
     {
         "id": 1,
-        "nome": "Sala de Reuniões A",
-        "descricao": "Uma sala equipada para reuniões de até 10 pessoas.",
+        "nome": "Auditório",
+        "descricao": "Uma sala equipada para reuniões de até 350 pessoas.",
         "status": "disponível",
-        "tipo": "Reunião",
-        "imagemg": "salaA.jpg",
-        "imagemp": "monitores/monitor1p.jpg"
+        "tipo": "Palestra",
+        "imagemg": "Auditorio.jpg",
+        "imagemp": "Auditorio.jpg"
     },
     {
         "id": 2,
-        "nome": "Auditório B",
-        "descricao": "Auditório para eventos maiores, com capacidade para 50 pessoas.",
+        "nome": "Biblioteca",
+        "descricao": "Biblioteca para estudos, com capacidade para 30 pessoas.",
         "status": "reservado",
-        "tipo": "Evento",
-        "imagemg": "salaB.jpg",
-        "imagemp": "monitores/monitor2p.jpg"
+        "tipo": "Estudos",
+        "imagemg": "Biblioteca.jpg",
+        "imagemp": "Biblioteca.jpg"
     },
     {
         "id": 3,
-        "nome": "Laboratório C",
+        "nome": "Laboratório Dell",
         "descricao": "Laboratório com equipamentos para cursos práticos e workshops.",
         "status": "em manutenção",
         "tipo": "Laboratório",
-        "imagemg": "laboratorioC.jpg",
-        "imagemp": "monitores/monitor3p.jpg"
+        "imagemg": "InfoLab.jpg",
+        "imagemp": "InfoLab.jpg"
     }
   ]
 }
