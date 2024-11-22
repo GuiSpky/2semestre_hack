@@ -18,7 +18,7 @@ class HistoricosController extends Controller
 
     public function store(Request $request)
     {
-        $dados = $request->only(["nome","tipo","descricao","status"]);
+        $dados = $request->only(["reserva_id","alteracoes","modificado_em"]);
 
 
         Historico::create($dados);
@@ -30,10 +30,9 @@ class HistoricosController extends Controller
         $historico = Historico::findOrFail($id);
 
         $historico->update([
-            "nome"=>$request->nome,
-	        "descricao"=>$request->descricao,
-	        "tipo"=>$request->tipo,
-	        "status"=>$request->status
+            "reserva_id"=>$request->reserva_id,
+	        "alteracoes"=>$request->alteracoes,
+	        "modificado_em"=>$request->modificado_em,
         ]);
 
         $historico = Historico::findOrFail($id);
