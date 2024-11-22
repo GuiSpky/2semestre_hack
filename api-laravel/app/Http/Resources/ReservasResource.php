@@ -20,7 +20,6 @@ class ReservasResource extends JsonResource
             'horario_inicio'=> $this->horario_inicio,
             'horario_fim'=> $this->horario_fim,
             'status'=> $this->status,
-
         ];
     }
 }
