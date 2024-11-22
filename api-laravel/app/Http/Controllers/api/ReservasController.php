@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ReservasRequest;
 use App\Http\Resources\ReservasResource;
 use App\Models\Reservas;
 use Illuminate\Http\Request;
@@ -17,39 +18,46 @@ class ReservasController extends Controller
 
     public function store(Request $request)
     {
-        $dados = $request->only(["nome","tipo","descricao","status"]);
+        $dados = $request->only(["id_usuario","id_ambiente","horario_inicio","horario_fim","status"]);
+
         // dd($dados);
 
-        Reservas::create($dados);
-        return new Reservas($dados);
+        Reservas::create([
+            "id_usuario"=>$request->id_usuario,
+	        "id_ambiente"=>$request->id_ambiente,
+	        "horario_inicio"=>$request->horario_inicio,
+	        "horario_fim"=>$request->horario_fim,
+	        "status"=>$request->status
+        ]);
+        return($dados);
     }
 
     public function update(Request $request, string $id)
     {
-        $ambiente = Reservas::findOrFail($id);
+        $reserva = Reservas::findOrFail($id);
 
-        $ambiente->update([
-            "nome"=>$request->nome,
-	        "descricao"=>$request->descricao,
-	        "tipo"=>$request->tipo,
+        $reserva->update([
+            "id_usuario"=>$request->id_usuario,
+	        "id_ambiente"=>$request->id_ambiente,
+	        "horario_inicio"=>$request->horario_inicio,
+	        "horario_fim"=>$request->horario_fim,
 	        "status"=>$request->status
         ]);
 
-        $ambiente = Reservas::findOrFail($id);
 
-        return new Reservas($ambiente);
+        return ($reserva);
     }
 
     public function destroy(string $id)
     {
-        $ambiente = Reservas::findOrFail($id); // Encontra o recurso ou lança um erro 404
+        $reserva = Reservas::findOrFail($id); // Encontra o recurso ou lança um erro 404
 
-        // Exclui o ambiente
-        $ambiente->delete();
+        // Exclui a reserva
+        $reserva->delete();
 
         // Retorna apenas uma mensagem de sucesso
         return response()->json([
-            'message' => 'Ambiente deletado com sucesso.',
+            'message' => 'Reserva deletado com sucesso.',
         ], 200);
     }
 }

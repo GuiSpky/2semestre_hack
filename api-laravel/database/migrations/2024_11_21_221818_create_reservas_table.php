@@ -17,8 +17,8 @@ return new class extends Migration
             $table->foreign('id_usuario')->references('id')->on('users');
             $table->bigInteger('id_ambiente')->unsigned();
             $table->foreign('id_ambiente')->references('id')->on('ambientes');
-            $table->datetime('horario_inicio');
-            $table->datetime('horario_fim');
+            $table->time('horario_inicio');
+            $table->time('horario_fim');
             $table->string('status');
             $table->timestamps();
         });

@@ -17,4 +17,7 @@ Route::put('/ambientes/{id}', [AmbienteController::class, 'update']);
 
 Route::apiResource('historicos', HistoricosController::class);
 Route::apiResource('notificacoes', NotificacoesController::class);
+
 Route::apiResource('reservas', ReservasController::class);
+Route::put('/reservas/{id}', [ReservasController::class, 'update']);
+Route::delete('/reservas/deletar/{id}', [ReservasController::class, 'destroy']);

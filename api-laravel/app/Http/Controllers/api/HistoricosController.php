@@ -9,9 +9,7 @@ use Illuminate\Http\Request;
 
 class HistoricosController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
         $dados = Historico::all();
@@ -21,7 +19,7 @@ class HistoricosController extends Controller
     public function store(Request $request)
     {
         $dados = $request->only(["nome","tipo","descricao","status"]);
-        // dd($dados);
+
 
         Historico::create($dados);
         return new Historico($dados);
@@ -29,30 +27,30 @@ class HistoricosController extends Controller
 
     public function update(Request $request, string $id)
     {
-        $ambiente = Historico::findOrFail($id);
+        $historico = Historico::findOrFail($id);
 
-        $ambiente->update([
+        $historico->update([
             "nome"=>$request->nome,
 	        "descricao"=>$request->descricao,
 	        "tipo"=>$request->tipo,
 	        "status"=>$request->status
         ]);
 
-        $ambiente = Historico::findOrFail($id);
+        $historico = Historico::findOrFail($id);
 
-        return new Historico($ambiente);
+        return new Historico($historico);
     }
 
     public function destroy(string $id)
     {
-        $ambiente = Historico::findOrFail($id); // Encontra o recurso ou lança um erro 404
+        $historico = Historico::findOrFail($id); // Encontra o recurso ou lança um erro 404
 
-        // Exclui o ambiente
-        $ambiente->delete();
+        // Exclui o historico
+        $historico->delete();
 
         // Retorna apenas uma mensagem de sucesso
         return response()->json([
-            'message' => 'Ambiente deletado com sucesso.',
+            'message' => 'Historico deletado com sucesso.',
         ], 200);
     }
 }

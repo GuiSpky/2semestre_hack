@@ -22,7 +22,7 @@ class AmbienteController extends Controller
         // dd($dados);
 
         Ambientes::create($dados);
-        return new Ambientes($dados);
+        return ($dados);
     }
 
     public function update(Request $request, string $id)
@@ -38,7 +38,7 @@ class AmbienteController extends Controller
 
         $ambiente = Ambientes::findOrFail($id);
 
-        return new Ambientes($ambiente);
+        return ($ambiente);
     }
 
     public function destroy(string $id)
