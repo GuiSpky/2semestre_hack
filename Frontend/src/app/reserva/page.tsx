@@ -15,6 +15,7 @@ import {
   ErrorMessage
 } from './style'; // Estilos personalizados para a página de reserva
 import { Footer } from '@/components/Footer';
+import { Menu } from '@/components/Menu';
 
 const ambientes = [
   {
@@ -72,6 +73,7 @@ const Reserva = () => {
 
   return (
     <>
+      <Menu />
       <ReservaContainer>
         <ReservaTitle>Faça sua Reserva</ReservaTitle>
 
