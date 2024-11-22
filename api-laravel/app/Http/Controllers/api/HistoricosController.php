@@ -16,54 +16,43 @@ class HistoricosController extends Controller
     {
         $dados = Historico::all();
         return HistoricoResource::collection($dados);
-
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $dados = $request->only(["nome","tipo","descricao","status"]);
+        // dd($dados);
+
+        Historico::create($dados);
+        return new Historico($dados);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
-        //
+        $ambiente = Historico::findOrFail($id);
+
+        $ambiente->update([
+            "nome"=>$request->nome,
+	        "descricao"=>$request->descricao,
+	        "tipo"=>$request->tipo,
+	        "status"=>$request->status
+        ]);
+
+        $ambiente = Historico::findOrFail($id);
+
+        return new Historico($ambiente);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-        //
+        $ambiente = Historico::findOrFail($id); // Encontra o recurso ou lança um erro 404
+
+        // Exclui o ambiente
+        $ambiente->delete();
+
+        // Retorna apenas uma mensagem de sucesso
+        return response()->json([
+            'message' => 'Ambiente deletado com sucesso.',
+        ], 200);
     }
 }

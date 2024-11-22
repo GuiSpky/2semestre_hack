@@ -9,60 +9,47 @@ use Illuminate\Http\Request;
 
 class ReservasController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $dados = Reservas::all();
         return ReservasResource::collection($dados);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $dados = $request->only(["nome","tipo","descricao","status"]);
+        // dd($dados);
+
+        Reservas::create($dados);
+        return new Reservas($dados);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
-        //
+        $ambiente = Reservas::findOrFail($id);
+
+        $ambiente->update([
+            "nome"=>$request->nome,
+	        "descricao"=>$request->descricao,
+	        "tipo"=>$request->tipo,
+	        "status"=>$request->status
+        ]);
+
+        $ambiente = Reservas::findOrFail($id);
+
+        return new Reservas($ambiente);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-        //
+        $ambiente = Reservas::findOrFail($id); // Encontra o recurso ou lança um erro 404
+
+        // Exclui o ambiente
+        $ambiente->delete();
+
+        // Retorna apenas uma mensagem de sucesso
+        return response()->json([
+            'message' => 'Ambiente deletado com sucesso.',
+        ], 200);
     }
 }

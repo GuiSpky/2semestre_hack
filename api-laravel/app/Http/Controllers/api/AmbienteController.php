@@ -9,30 +9,22 @@ use Illuminate\Http\Request;
 
 class AmbienteController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
         $dados = Ambientes::all();
         return AmbienteResouce::collection($dados);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $dados = $request->only(["nome","tipo","descricao","status"]);
         // dd($dados);
 
         Ambientes::create($dados);
-        return new AmbienteResouce($dados);
+        return new Ambientes($dados);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         $ambiente = Ambientes::findOrFail($id);
@@ -46,12 +38,9 @@ class AmbienteController extends Controller
 
         $ambiente = Ambientes::findOrFail($id);
 
-        return new AmbienteResouce($ambiente);
+        return new Ambientes($ambiente);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         $ambiente = Ambientes::findOrFail($id); // Encontra o recurso ou lança um erro 404
