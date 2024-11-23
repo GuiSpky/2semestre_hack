@@ -16,6 +16,7 @@ import {
   ErrorMessage,
   DeleteButton
 } from './style';
+import { MenuAdmin } from '@/components/MenuAdmin';
 
 
 const Admin = () => {
@@ -170,6 +171,7 @@ const Admin = () => {
 
   return (
     <>
+      <MenuAdmin />
       <AdminContainer>
         <AdminTitle>Cadastro de Ambientes</AdminTitle>
 

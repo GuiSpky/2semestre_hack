@@ -10,18 +10,18 @@ export const Card = (props: ISala) => {
 
     return (
         <CardBody>
-            <Image
+            {/* <Image
                 src={`/imagens/${props.imagemg}`}
                 alt={props.nome}
                 width={250}
                 height={200}
-            />
+            /> */}
             <Title>{props.nome}</Title>
             <TitleTipo>{props.tipo}</TitleTipo>
             <TextStatus status={props.status}>{props.status}</TextStatus>
             <Button
                 onClick={() => {
-                    router.push('/sala/'+props.id)
+                    router.push('/ambientes/'+props.id)
                 }}
             >
                 <TextButton>Detalhes</TextButton>

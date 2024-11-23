@@ -1,10 +1,9 @@
 export interface ISala {
-    imagemg: any;
     "id": number,
     "nome": string,
     "tipo": string,
-    "status": "disponível" | "reservado" | "em manutenção",
     "descricao": string,
+    "status": string,
 }
 
 export interface IUsuario {
