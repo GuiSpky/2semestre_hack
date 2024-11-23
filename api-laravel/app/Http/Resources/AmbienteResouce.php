@@ -17,6 +17,7 @@ class AmbienteResouce extends JsonResource
         return [
             'id'=>$this->id,
             'nome'=> $this->nome,
+            'foto' => $this->foto,
             'tipo'=> $this->tipo,
             'descricao'=> $this->descricao,
             'status'=> $this->status

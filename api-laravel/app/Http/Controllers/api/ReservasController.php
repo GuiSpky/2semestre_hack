@@ -32,6 +32,13 @@ class ReservasController extends Controller
         return($dados);
     }
 
+    public function show(string $id)
+    {
+        $reservas = Reservas::findOrFail($id); // Encontra o recurso ou lança um erro 404
+
+        return ($reservas);
+    }
+
     public function update(Request $request, string $id)
     {
         $reserva = Reservas::findOrFail($id);

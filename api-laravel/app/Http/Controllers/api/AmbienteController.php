@@ -16,10 +16,20 @@ class AmbienteController extends Controller
         return AmbienteResouce::collection($dados);
     }
 
+    public function show(string $id)
+    {
+        $ambiente = Ambientes::findOrFail($id); // Encontra o recurso ou lança um erro 404
+
+        return ($ambiente);
+    }
+
     public function store(Request $request)
     {
-        $dados = $request->only(["nome","tipo","descricao","status"]);
-        // dd($dados);
+        $dados = $request->except('_token');
+        if($request->hasFile('foto') && $request->file('foto')->isValid()){
+            $avatarPath = $request->file('foto')->store('foto', 'public');
+            $dados['foto'] = $avatarPath;
+        }
 
         Ambientes::create($dados);
         return ($dados);

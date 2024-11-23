@@ -20,6 +20,10 @@ import { MenuAdmin } from '@/components/MenuAdmin';
 
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5743be7bc4d6e64da728e2b4b0f35b19959d6165
 
 const Admin = () => {
   const [ambientName, setAmbientName] = useState<string>(''); // Nome do novo ambiente ou ambiente a ser alterado
@@ -29,6 +33,7 @@ const Admin = () => {
   const [ambientList, setAmbientList] = useState<any[]>([]); // Lista de ambientes
   const [selectedAmbient, setSelectedAmbient] = useState<any | null>(null); // Ambiente selecionado para edição
   const [error, setError] = useState<string | null>(null); // Mensagem de erro para duplicação
+
 
   // Função para carregar a lista de ambientes da API
   const fetchAmbientes = async () => {
@@ -43,18 +48,31 @@ const Admin = () => {
       console.error('Erro ao buscar ambientes:', error);
       setError('Não foi possível carregar a lista de ambientes.');
     }
+
+
   };
 
   useEffect(() => {
-    fetchAmbientes(); // Chama a API para buscar os ambientes ao carregar o componente
+    // Supondo que você faça um fetch e receba os dados
+    fetch('/api/ambientes')
+      .then((response) => response.json())
+      .then((data) => {
+        setAmbientList(data);
+      });
   }, []);
+
 
   // Função para criar novo ambiente
   const handleCreateAmbient = async () => {
-    if (ambientList.some((ambiente) => ambiente.nome === ambientName)) {
+    console.log(Array.isArray(ambientList));  // Isso deve retornar true se for um array
+    console.log(ambientList);  // Verifique o conteúdo de ambientList
+
+    // Exemplo de como você pode garantir que ambientList é um array
+    if (Array.isArray(ambientList) && ambientList.some((ambiente) => ambiente.nome === ambientName)) {
       setError('Já existe um ambiente com esse nome.');
       return;
     }
+
 
     if (ambientName && ambientType && ambientDescription && ambientStatus) {
       try {
@@ -96,25 +114,36 @@ const Admin = () => {
 
   // Função para excluir um ambiente
   const handleDeleteAmbient = async (ambientId: string) => {
+    console.log('ID do ambiente a ser excluído:', ambientId); // Verifique se o ID está correto
     const confirmDelete = window.confirm(`Tem certeza que deseja excluir o ambiente?`);
     if (confirmDelete) {
       try {
+<<<<<<< HEAD
         const response = await fetch(`http://127.0.0.1:8000/api/ambientes/${ambientId}`, {
           method: 'DELETE'
         });
+=======
+        const response = await fetch(`http://localhost:8000/api/ambientes/deletar/${ambientId}`, {
+  method: 'DELETE'
+});
+
+
+>>>>>>> 5743be7bc4d6e64da728e2b4b0f35b19959d6165
         if (response.ok) {
-          setAmbientList(ambientList.filter((ambient) => ambient.id !== ambientId));
+          setAmbientList((prevList) => prevList.filter((ambient) => ambient.id !== ambientId));
         } else {
           const errorData = await response.json();
           console.error('Erro ao excluir o ambiente:', errorData);
           setError('Falha ao excluir o ambiente.');
         }
+
       } catch (error) {
         console.error('Erro ao excluir o ambiente:', error);
         setError('Erro ao excluir o ambiente.');
       }
     }
   };
+
 
   // Função para selecionar um ambiente para edição
   const handleSelectAmbient = (ambient: any) => {
@@ -172,6 +201,7 @@ const Admin = () => {
   };
 
   return (
+<<<<<<< HEAD
     <>
       <MenuAdmin />
       <AdminContainer>
@@ -182,6 +212,75 @@ const Admin = () => {
 
           {/* Selecione um ambiente para edição */}
           <CreateAmbient>
+=======
+    <AdminContainer>
+      <AdminTitle>Cadastro de Ambientes</AdminTitle>
+
+      <AdminSection>
+        <SectionTitle>Gerenciamento de Ambientes</SectionTitle>
+
+        {/* Selecione um ambiente para edição */}
+        <CreateAmbient>
+          <AmbientInput
+            type="text"
+            value={ambientName}
+            onChange={(e) => setAmbientName(e.target.value)}
+            placeholder="Nome do novo ambiente"
+          />
+          <AmbientInput
+            type="text"
+            value={ambientType}
+            onChange={(e) => setAmbientType(e.target.value)}
+            placeholder="Tipo do ambiente"
+          />
+          <AmbientInput
+            type="text"
+            value={ambientDescription}
+            onChange={(e) => setAmbientDescription(e.target.value)}
+            placeholder="Descrição do ambiente"
+          />
+          <AmbientInput
+            type="text"
+            value={ambientStatus}
+            onChange={(e) => setAmbientStatus(e.target.value)}
+            placeholder="Status do ambiente"
+          />
+          <CreateButton onClick={handleCreateAmbient}>Criar Novo Ambiente</CreateButton>
+
+          {/* Exibe a mensagem de erro se o nome do ambiente for duplicado */}
+          {error && <ErrorMessage>{error}</ErrorMessage>}
+        </CreateAmbient>
+
+        <AmbientList>
+          <h3>Ambientes Criados:</h3>
+          <ul>
+            {ambientList.length > 0 ? (
+              ambientList.map((ambient: any, index: number) => (
+                <li key={index} onClick={() => handleSelectAmbient(ambient)}>
+                  {ambient.nome} - {ambient.tipo} - {ambient.status}
+
+                  {/* Botão de exclusão */}
+                  <DeleteButton
+                    onClick={(e) => {
+                      e.stopPropagation(); // Impede que o clique no botão dispare o clique no <li>
+                      handleDeleteAmbient(ambient.id); // Chama a função de exclusão
+                    }}
+                  >
+                    Excluir
+                  </DeleteButton>
+                </li>
+              ))
+            ) : (
+              <p>Nenhum ambiente criado ainda.</p>
+            )}
+          </ul>
+        </AmbientList>
+
+
+        {selectedAmbient && (
+          <div>
+            <h3>Alterar Ambiente Selecionado</h3>
+>>>>>>> 5743be7bc4d6e64da728e2b4b0f35b19959d6165
             <AmbientInput
               type="text"
               value={ambientName}
