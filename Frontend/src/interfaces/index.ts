@@ -1,6 +1,7 @@
 export interface ISala {
     "id": number,
     "nome": string,
+    "foto": string,
     "tipo": string,
     "descricao": string,
     "status": string,

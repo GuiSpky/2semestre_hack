@@ -40,6 +40,7 @@ export default function Home() {
               key={sala.id}
               id={sala.id}
               nome={sala.nome}
+              foto={sala.foto}
               descricao={sala.descricao}
               status={sala.status}
               tipo={sala.tipo}

@@ -14,8 +14,8 @@ export default function Sala(
 
     useEffect(() => {
 
-        console.log(process.env.NEXT_PUBLIC_API_URL + '/salas')
-        axios.get(process.env.NEXT_PUBLIC_API_URL + '/salas',
+        console.log(process.env.APP_URL + '/ambientes')
+        axios.get(process.env.APP_URL + '/ambientes',
             {
                 // /salas?id=132
                 params: {
@@ -48,12 +48,12 @@ export default function Sala(
                             <h1>Sala</h1>
                             <Row>
                                 <Col4>
-                                    <img
+                                    {/* <img
                                         style={{
                                             width: '100%'
                                         }}
                                         src={`/imagens/${sala.imagemg}`}
-                                    />
+                                    /> */}
                                 </Col4>
                                 <Col6>
                                     <h3>{sala.nome}</h3>
@@ -93,7 +93,7 @@ export default function Sala(
                             </Row>
                         </>
                         :
-                        <h2>Nenhum sala encontrado :/</h2>
+                        <h2>Nenhuma sala encontrado :/</h2>
                 }
 
             </div>

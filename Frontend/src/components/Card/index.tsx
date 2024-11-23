@@ -21,7 +21,7 @@ export const Card = (props: ISala) => {
             <TextStatus status={props.status}>{props.status}</TextStatus>
             <Button
                 onClick={() => {
-                    router.push('/ambientes/'+props.id)
+                    router.push('/sala/'+props.id)
                 }}
             >
                 <TextButton>Detalhes</TextButton>
