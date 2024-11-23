@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('ambientes', function (Blueprint $table) {
             $table->id();
             $table->string('nome')->unique(); // Nome único do espaço
+            $table->string('foto')->nullable();
             $table->string('tipo'); // Tipo, sala de aula, lab, auditório...
             $table->text('descricao')->nullable(); // Descrição do espaço (opcional)
             $table->string('status')->nullable(); // Disponivel, reservado, manutenção

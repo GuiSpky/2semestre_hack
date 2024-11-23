@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Ambientes extends Model
 {
-    protected $fillable = ['nome','tipo','descricao','status'];
+    protected $fillable = ['nome','foto','tipo','descricao','status'];
 }

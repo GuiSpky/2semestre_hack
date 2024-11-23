@@ -25,6 +25,13 @@ class HistoricosController extends Controller
         return new Historico($dados);
     }
 
+    public function show(string $id)
+    {
+        $historico = Historico::findOrFail($id); // Encontra o recurso ou lança um erro 404
+
+        return ($historico);
+    }
+
     public function update(Request $request, string $id)
     {
         $historico = Historico::findOrFail($id);
