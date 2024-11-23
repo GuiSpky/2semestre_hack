@@ -3,9 +3,9 @@
     {
         "id": 1,
         "nome": "Auditório",
+        "tipo": "Palestra",
         "descricao": "Uma sala equipada para reuniões de até 350 pessoas.",
         "status": "disponível",
-        "tipo": "Palestra",
         "imagemg": "Auditorio.jpg",
         "imagemp": "Auditorio.jpg"
     },

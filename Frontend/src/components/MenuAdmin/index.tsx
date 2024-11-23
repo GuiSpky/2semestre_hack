@@ -8,7 +8,7 @@ interface ICategoria {
   nome: string
 }
 
-export const Menu = () => {
+export const MenuAdmin = () => {
 
   const [categorias, setCategorias] = useState<Array<ICategoria>>([]);
 
@@ -37,24 +37,42 @@ export const Menu = () => {
             <NavbarLinkContainer>
 
               <NavbarLinkExtended
-                href={"/"}
+                href={"/painelAdmin"}
                 style={{
                   color: '#fff',
                 }}
               >
-                Hachathon
+                Painel Administrativo
               </NavbarLinkExtended>
 
               <NavbarLink
-                href={"/"}
+                href={"/painelAdmin"}
               >
                 Ambientes
               </NavbarLink>
 
               <NavbarLink
+                href={"/painelAdmin/ambiente"}
+              >
+                Gerenciar Ambientes
+              </NavbarLink>
+
+              <NavbarLink
+                href={"/painelAdmin/historico"}
+              >
+                Histórico de Reservas
+              </NavbarLink>
+
+              <NavbarLink
+                href={"/painelAdmin/usuario"}
+              >
+                Gerenciar Usuários
+              </NavbarLink>
+
+              <NavbarLink
                 href={"/reserva"}
               >
-                Reserva
+                Criar Reserva
               </NavbarLink>
 
             </NavbarLinkContainer>
