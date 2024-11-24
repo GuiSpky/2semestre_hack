@@ -91,26 +91,27 @@ const Admin = () => {
   // Função para salvar a alteração do nome do ambiente
   const handleUpdateAmbient = async () => {
     if (selectedAmbient && ambientName && ambientType && ambientDescription && ambientStatus) {
-      const formData = new FormData();
-      formData.append('nome', ambientName);
-      formData.append('tipo', ambientType);
-      formData.append('descricao', ambientDescription);
-      formData.append('status', ambientStatus);
-      if (ambientFoto) formData.append('foto', ambientFoto);
-
+      const updatedAmbient = {
+        nome: ambientName,
+        tipo: ambientType,
+        descricao: ambientDescription,
+        status: ambientStatus,
+      };
+  
       try {
         const response = await fetch(`http://127.0.0.1:8000/api/ambientes/${selectedAmbient.id}`, {
           method: 'PUT',
-          body: formData,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(updatedAmbient),
         });
-
+  
         if (response.ok) {
-          const updatedAmbient = await response.json(); // Obtém o ambiente atualizado da resposta
+          const updatedData = await response.json();
           setAmbientList(
             ambientList.map((ambient) =>
-              ambient.id === selectedAmbient.id
-                ? updatedAmbient // Substitui pelo ambiente atualizado
-                : ambient
+              ambient.id === selectedAmbient.id ? updatedData : ambient
             )
           );
           setSelectedAmbient(null);
@@ -131,6 +132,29 @@ const Admin = () => {
       }
     } else {
       setError('Todos os campos são obrigatórios.');
+    }
+  };
+
+  // Função para excluir ambiente
+  const handleDeleteAmbient = async (ambientId: number) => {
+    const confirmDelete = window.confirm('Tem certeza que deseja excluir este ambiente?');
+    if (confirmDelete) {
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/api/ambientes/${ambientId}`, {
+          method: 'DELETE',
+        });
+
+        if (response.ok) {
+          setAmbientList(ambientList.filter((ambient) => ambient.id !== ambientId)); // Remove o ambiente da lista
+        } else {
+          const errorData = await response.json();
+          console.error('Erro ao excluir o ambiente:', errorData);
+          setError('Falha ao excluir o ambiente.');
+        }
+      } catch (error) {
+        console.error('Erro ao excluir o ambiente:', error);
+        setError('Erro ao excluir o ambiente.');
+      }
     }
   };
 
@@ -181,9 +205,17 @@ const Admin = () => {
               accept="image/*"
               onChange={(e) => e.target.files && setAmbientFoto(e.target.files[0])}
             />
-            <button className="btn btn-success mb-3" onClick={handleCreateAmbient}>
-              Criar Novo Ambiente
-            </button>
+            <div className="d-flex">
+              {!selectedAmbient ? (
+                <button className="btn btn-success mb-3" onClick={handleCreateAmbient}>
+                  Criar Novo Ambiente
+                </button>
+              ) : (
+                <button className="btn btn-primary mb-3" onClick={handleUpdateAmbient}>
+                  Salvar Alterações
+                </button>
+              )}
+            </div>
 
             {error && <p className="text-danger">{error}</p>}
           </div>
@@ -192,11 +224,40 @@ const Admin = () => {
             <h3>Ambientes Criados:</h3>
             <ul className="list-group">
               {ambientList.length > 0 ? (
-                ambientList.map((ambient: any, index: number) => (
-                  <li key={index} onClick={() => handleSelectAmbient(ambient)}
-                    className="list-group-item d-flex justify-content-between align-items-center">
-                    {ambient.nome} - {ambient.tipo} - {ambient.status}
-                    <button className="btn btn-warning btn-sm">Editar</button>
+                ambientList.map((ambient) => (
+                  <li key={ambient.id} className="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                      {ambient.foto ? (
+                        <img
+                          src={`/imagens/${ambient.foto}`}
+                          alt={ambient.nome}
+                          className="img-fluid"
+                          style={{ maxWidth: '100px', maxHeight: '100px', marginRight: '10px', borderRadius: '5px' }}
+                        />
+                      ) : (
+                        <img
+                          src="/default-image.jpg"
+                          alt={ambient.nome}
+                          className="img-fluid"
+                          style={{ maxWidth: '100px', maxHeight: '100px', marginRight: '10px', borderRadius: '5px' }}
+                        />
+                      )}
+                      <strong>{ambient.nome}</strong> - {ambient.tipo}
+                    </div>
+                    <div className="justify-content-end">
+                    <button
+                      className="btn btn-warning me-2 "
+                      onClick={() => handleSelectAmbient(ambient)}
+                    >
+                      Editar
+                    </button>
+                    <button
+                      className="btn btn-danger"
+                      onClick={() => handleDeleteAmbient(ambient.id)}
+                    >
+                      Excluir
+                    </button>
+                    </div>
                   </li>
                 ))
               ) : (
