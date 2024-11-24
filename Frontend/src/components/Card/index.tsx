@@ -1,31 +1,51 @@
-"use client"
-import Image from "next/image"
-import { Button, CardBody, TextButton, TextStatus, Title, TitleTipo } from "./style"
-import { ISala } from "@/interfaces"
-import { useRouter } from "next/navigation"
+"use client";
+import Image from "next/image";
+import { ISala } from "@/interfaces";
+import { useRouter } from "next/navigation";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export const Card = (props: ISala) => {
+  const router = useRouter();
 
-    const router = useRouter()
+  return (
+    <div className="card text-center p-3" style={{ maxWidth: "18rem", margin: "18px" }}>
+      <h3>{props.nome}</h3>
+      <Image
+        src={`/imagens/${props.foto}`}
+        alt={props.nome}
+        width={250}
+        height={200}
+        className="card-img-top"
+      />
+      <h5 className="text-primary mt-2">{props.tipo}</h5>
+      <p
+        className={`font-weight-bold mt-2 ${getStatusClass(props.status)}`}
+        style={{ textTransform: "capitalize" }}
+      >
+        {props.status}
+      </p>
+      <button
+        onClick={() => {
+          router.push("/sala/" + props.id);
+        }}
+        className="btn btn-dark mt-3 w-100"
+      >
+        Detalhes
+      </button>
+    </div>
+  );
+};
 
-    return (
-        <CardBody>
-            <Image
-                src={`\/C:/fakepath/${props.foto}`}
-                alt={props.nome}
-                width={250}
-                height={200}
-            />
-            <Title>{props.nome}</Title>
-            <TitleTipo>{props.tipo}</TitleTipo>
-            <TextStatus status={props.status}>{props.status}</TextStatus>
-            <Button
-                onClick={() => {
-                    router.push('/sala/' + props.id)
-                }}
-            >
-                <TextButton>Detalhes</TextButton>
-            </Button>
-        </CardBody>
-    )
-}
+// Função para determinar a cor do status
+const getStatusClass = (status: string) => {
+  switch (status.toLowerCase()) {
+    case "disponível":
+      return "text-success";
+    case "reservado":
+      return "text-warning";
+    case "em manutenção":
+      return "text-danger";
+    default:
+      return "text-dark";
+  }
+};

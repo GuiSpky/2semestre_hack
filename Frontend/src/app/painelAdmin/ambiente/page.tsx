@@ -1,32 +1,16 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import {
-  AdminContainer,
-  AdminTitle,
-  AdminSection,
-  SectionTitle,
-  CreateAmbient,
-  AmbientInput,
-  CreateButton,
-  AmbientList,
-  ReportsInfo,
-  ReportsButton,
-  UpdateButton,
-  ErrorMessage,
-  DeleteButton,
-  Select,
-  AmbientInputImage
-} from './style';
 import { MenuAdmin } from '@/components/MenuAdmin';
-
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Footer } from '@/components/Footer';
 
 const Admin = () => {
   const [ambientName, setAmbientName] = useState<string>(''); // Nome do novo ambiente ou ambiente a ser alterado
   const [ambientType, setAmbientType] = useState<string>(''); // Tipo do ambiente
   const [ambientDescription, setAmbientDescription] = useState<string>(''); // Descrição do ambiente
   const [ambientStatus, setAmbientStatus] = useState<string>(''); // Status do ambiente
-  const [ambientFoto, setAmbientFoto] = useState<string>('');
+  const [ambientFoto, setAmbientFoto] = useState<File | null>(null); // Armazenar o arquivo de imagem
   const [ambientList, setAmbientList] = useState<any[]>([]); // Lista de ambientes
   const [selectedAmbient, setSelectedAmbient] = useState<any | null>(null); // Ambiente selecionado para edição
   const [error, setError] = useState<string | null>(null); // Mensagem de erro para duplicação
@@ -58,23 +42,20 @@ const Admin = () => {
     }
 
     if (ambientName && ambientType && ambientDescription && ambientStatus) {
+      const formData = new FormData();
+      formData.append('nome', ambientName);
+      formData.append('tipo', ambientType);
+      formData.append('descricao', ambientDescription);
+      formData.append('status', ambientStatus);
+      if (ambientFoto) formData.append('foto', ambientFoto);
+
       try {
         const response = await fetch('http://127.0.0.1:8000/api/ambientes', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            nome: ambientName,
-            tipo: ambientType,
-            descricao: ambientDescription,
-            status: ambientStatus,
-            foto: ambientFoto
-          })
+          body: formData,
         });
 
         if (!response.ok) {
-          // Exibe a resposta do erro
           const errorData = await response.json();
           console.error('Erro ao criar o ambiente:', errorData);
           setError('Falha ao criar o ambiente.');
@@ -85,7 +66,7 @@ const Admin = () => {
           setAmbientType('');
           setAmbientDescription('');
           setAmbientStatus('');
-          setAmbientFoto('');
+          setAmbientFoto(null);
           setError(null); // Limpa a mensagem de erro
         }
       } catch (error) {
@@ -97,28 +78,6 @@ const Admin = () => {
     }
   };
 
-  // Função para excluir um ambiente
-  const handleDeleteAmbient = async (ambientId: string) => {
-    const confirmDelete = window.confirm(`Tem certeza que deseja excluir o ambiente?`);
-    if (confirmDelete) {
-      try {
-        const response = await fetch(`http://127.0.0.1:8000/api/ambientes/${ambientId}`, {
-          method: 'DELETE'
-        });
-        if (response.ok) {
-          setAmbientList(ambientList.filter((ambient) => ambient.id !== ambientId));
-        } else {
-          const errorData = await response.json();
-          console.error('Erro ao excluir o ambiente:', errorData);
-          setError('Falha ao excluir o ambiente.');
-        }
-      } catch (error) {
-        console.error('Erro ao excluir o ambiente:', error);
-        setError('Erro ao excluir o ambiente.');
-      }
-    }
-  };
-
   // Função para selecionar um ambiente para edição
   const handleSelectAmbient = (ambient: any) => {
     setSelectedAmbient(ambient);
@@ -126,25 +85,23 @@ const Admin = () => {
     setAmbientType(ambient.tipo); // Preenche o tipo
     setAmbientDescription(ambient.descricao); // Preenche a descrição
     setAmbientStatus(ambient.status); // Preenche o status
-    setAmbientFoto(ambient.foto);
+    setAmbientFoto(null); // Limpar a foto para não tentar atribuir valor programaticamente
   };
 
   // Função para salvar a alteração do nome do ambiente
   const handleUpdateAmbient = async () => {
-    if (selectedAmbient && ambientName && ambientType && ambientDescription && ambientStatus && ambientFoto) {
+    if (selectedAmbient && ambientName && ambientType && ambientDescription && ambientStatus) {
+      const formData = new FormData();
+      formData.append('nome', ambientName);
+      formData.append('tipo', ambientType);
+      formData.append('descricao', ambientDescription);
+      formData.append('status', ambientStatus);
+      if (ambientFoto) formData.append('foto', ambientFoto);
+
       try {
         const response = await fetch(`http://127.0.0.1:8000/api/ambientes/${selectedAmbient.id}`, {
           method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            nome: ambientName,
-            tipo: ambientType,
-            descricao: ambientDescription,
-            status: ambientStatus,
-            foto: ambientFoto
-          })
+          body: formData,
         });
 
         if (response.ok) {
@@ -161,7 +118,7 @@ const Admin = () => {
           setAmbientType('');
           setAmbientDescription('');
           setAmbientStatus('');
-          setAmbientFoto('');
+          setAmbientFoto(null);
           setError(null);
         } else {
           const errorData = await response.json();
@@ -180,112 +137,76 @@ const Admin = () => {
   return (
     <>
       <MenuAdmin />
-      <AdminContainer>
-        <AdminTitle>Cadastro de Ambientes</AdminTitle>
+      <div className="container">
+        <h1 className="text-center my-4">Gerenciamento de Ambientes</h1>
 
-        <AdminSection>
-          <SectionTitle>Gerenciamento de Ambientes</SectionTitle>
+        <div className="mb-5">
+          <h2 className="text-success">Cadastro de Ambiente</h2>
 
-          {/* Selecione um ambiente para edição */}
-          <CreateAmbient>
-            <AmbientInput
+          <div className="mb-4">
+            <input
               type="text"
+              className="form-control mb-2"
               value={ambientName}
               onChange={(e) => setAmbientName(e.target.value)}
               placeholder="Nome do novo ambiente"
             />
-            <AmbientInput
+            <input
               type="text"
+              className="form-control mb-2"
               value={ambientType}
               onChange={(e) => setAmbientType(e.target.value)}
               placeholder="Tipo do ambiente"
             />
-            <AmbientInput
+            <input
               type="text"
+              className="form-control mb-2"
               value={ambientDescription}
               onChange={(e) => setAmbientDescription(e.target.value)}
               placeholder="Descrição do ambiente"
             />
-            <Select
+            <select
+              className="form-control mb-2"
               value={ambientStatus}
               onChange={(e) => setAmbientStatus(e.target.value)}
             >
-              <option value="" disabled hidden>
-                Selecione o Status
-              </option>
+              <option value="" disabled hidden>Selecione o Status</option>
               <option value="Disponível">Disponível</option>
               <option value="Reservado">Reservado</option>
               <option value="Em manutenção">Em manutenção</option>
-            </Select>
-            <AmbientInputImage
+            </select>
+            <input
               type="file"
+              className="form-control mb-2"
               accept="image/*"
-              value={ambientFoto}
-              onChange={(e) => setAmbientFoto(e.target.value)}
-              placeholder="Imagem"
+              onChange={(e) => e.target.files && setAmbientFoto(e.target.files[0])}
             />
-            <CreateButton onClick={handleCreateAmbient}>Criar Novo Ambiente</CreateButton>
+            <button className="btn btn-success mb-3" onClick={handleCreateAmbient}>
+              Criar Novo Ambiente
+            </button>
 
-            {/* Exibe a mensagem de erro se o nome do ambiente for duplicado */}
-            {error && <ErrorMessage>{error}</ErrorMessage>}
-          </CreateAmbient>
+            {error && <p className="text-danger">{error}</p>}
+          </div>
 
-          <AmbientList>
+          <div>
             <h3>Ambientes Criados:</h3>
-            <ul>
+            <ul className="list-group">
               {ambientList.length > 0 ? (
                 ambientList.map((ambient: any, index: number) => (
-                  <li key={index} onClick={() => handleSelectAmbient(ambient)}>
+                  <li key={index} onClick={() => handleSelectAmbient(ambient)}
+                    className="list-group-item d-flex justify-content-between align-items-center">
                     {ambient.nome} - {ambient.tipo} - {ambient.status}
-                    <DeleteButton onClick={() => handleDeleteAmbient(ambient.id)}>Excluir</DeleteButton>
+                    <button className="btn btn-warning btn-sm">Editar</button>
                   </li>
                 ))
               ) : (
-                <p>Nenhum ambiente criado ainda.</p>
+                <p className="text-warning">Não há ambientes cadastrados.</p>
               )}
             </ul>
-          </AmbientList>
-
-          {selectedAmbient && (
-            <div>
-              <h3>Alterar Ambiente Selecionado</h3>
-              <AmbientInput
-                type="text"
-                value={ambientName}
-                onChange={(e) => setAmbientName(e.target.value)}
-                placeholder="Novo nome do ambiente"
-              />
-              <AmbientInput
-                type="text"
-                value={ambientType}
-                onChange={(e) => setAmbientType(e.target.value)}
-                placeholder="Novo tipo do ambiente"
-              />
-              <AmbientInput
-                type="text"
-                value={ambientDescription}
-                onChange={(e) => setAmbientDescription(e.target.value)}
-                placeholder="Nova descrição"
-              />
-              <AmbientInput
-                type="text"
-                value={ambientStatus}
-                onChange={(e) => setAmbientStatus(e.target.value)}
-                placeholder="Novo status"
-              />
-              <UpdateButton onClick={handleUpdateAmbient}>Alterar Ambiente</UpdateButton>
-            </div>
-          )}
-        </AdminSection>
-
-        <AdminSection>
-          <SectionTitle>Relatórios de Uso</SectionTitle>
-          <ReportsInfo>
-            Aqui você pode visualizar relatórios de uso e gerar gráficos com base no uso dos ambientes.
-          </ReportsInfo>
-          <ReportsButton>Visualizar Relatórios</ReportsButton>
-        </AdminSection>
-      </AdminContainer>
+          </div>
+        </div>
+      </div>
+      <Footer />
     </>
   );
 };

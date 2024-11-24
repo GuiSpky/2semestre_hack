@@ -1,91 +1,57 @@
 "use client"
-import { useEffect, useState } from "react"
-import { LeftContainer, NavbarContainer, NavbarInnerContainer, NavbarLink, NavbarLinkContainer, NavbarLinkExtended, RightContainer } from "./style"
-import axios, { AxiosError } from "axios"
-
-interface ICategoria {
-  id: number,
-  nome: string
-}
+import Link from "next/link"
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { useState } from "react";
 
 export const MenuAdmin = () => {
-
-  const [categorias, setCategorias] = useState<Array<ICategoria>>([]);
-
-  useEffect(() => {
-
-    axios.get(
-      process.env.NEXT_PUBLIC_API_URL
-      +
-      '/categorias'
-    )
-      .then((resposta) => {
-        // Quando é Array [ 123, 456 ]
-        setCategorias(resposta.data)
-      })
-      .catch((err: AxiosError) => {
-        console.log(err)
-      })
-
-  }, [])
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <>
-      <NavbarContainer>
-        <NavbarInnerContainer>
-          <LeftContainer>
-            <NavbarLinkContainer>
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div className="container-fluid">
+        {/* Logo e Links principais */}
+        <Link className="navbar-brand" href="/painelAdmin">
+          Painel Administrativo
+        </Link>
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded={isMenuOpen ? "true" : "false"}
+          aria-label="Toggle navigation"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
 
-              <NavbarLinkExtended
-                href={"/painelAdmin"}
-                style={{
-                  color: '#fff',
-                }}
-              >
-                Painel Administrativo
-              </NavbarLinkExtended>
-
-              <NavbarLink
-                href={"/painelAdmin"}
-              >
-                Ambientes
-              </NavbarLink>
-
-              <NavbarLink
-                href={"/painelAdmin/ambiente"}
-              >
-                Gerenciar Ambientes
-              </NavbarLink>
-
-              <NavbarLink
-                href={"/painelAdmin/historico"}
-              >
-                Histórico de Reservas
-              </NavbarLink>
-
-              <NavbarLink
-                href={"/painelAdmin/usuario"}
-              >
-                Gerenciar Usuários
-              </NavbarLink>
-
-              <NavbarLink
-                href={"/reserva"}
-              >
-                Criar Reserva
-              </NavbarLink>
-
-            </NavbarLinkContainer>
-          </LeftContainer>
-          <RightContainer>
-            <NavbarLinkExtended
-              href={'/login'}
-            >
-              LogOut
-            </NavbarLinkExtended>
-          </RightContainer>
-        </NavbarInnerContainer>
-      </NavbarContainer>
-    </>
-  )
-}
+        {/* Navbar links */}
+        <div className={`collapse navbar-collapse ${isMenuOpen ? 'show' : ''}`} id="navbarNav">
+          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+            <li className="nav-item">
+              <Link className="nav-link" href="/painelAdmin">Ambientes</Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" href="/painelAdmin/ambiente">Gerenciar Ambientes</Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" href="/painelAdmin/historico">Histórico de Reservas</Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" href="/painelAdmin/usuario">Gerenciar Usuários</Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" href="/reserva">Criar Reserva</Link>
+            </li>
+          </ul>
+          <ul className="navbar-nav ms-auto">
+            <li className="nav-item">
+              <Link className="nav-link" href="/login">LogOut</Link>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  );
+};

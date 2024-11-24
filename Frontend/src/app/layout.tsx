@@ -1,4 +1,3 @@
-import { Footer } from "@/components/Footer";
 import StyledComponentsRegistry from "@/lib/registry";
 import { GlobalStyle } from "@/styles/global";
 import type { Metadata } from "next";

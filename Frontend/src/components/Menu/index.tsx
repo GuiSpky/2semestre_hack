@@ -1,73 +1,48 @@
-"use client"
-import { useEffect, useState } from "react"
-import { LeftContainer, NavbarContainer, NavbarInnerContainer, NavbarLink, NavbarLinkContainer, NavbarLinkExtended, RightContainer } from "./style"
-import axios, { AxiosError } from "axios"
+'use client'
 
-interface ICategoria {
-  id: number,
-  nome: string
-}
+import { useState } from "react";
+import Link from 'next/link';
 
 export const Menu = () => {
-
-  // const [categorias, setCategorias] = useState<Array<ICategoria>>([]);
-
-  // useEffect(() => {
-
-  //   axios.get(
-  //     process.env.NEXT_PUBLIC_API_URL
-  //     +
-  //     '/categorias'
-  //   )
-  //     .then((resposta) => {
-  //       // Quando é Array [ 123, 456 ]
-  //       setCategorias(resposta.data)
-  //     })
-  //     .catch((err: AxiosError) => {
-  //       console.log(err)
-  //     })
-
-  // }, [])
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <>
-      <NavbarContainer>
-        <NavbarInnerContainer>
-          <LeftContainer>
-            <NavbarLinkContainer>
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div className="container-fluid">
+        {/* Logo e Links principais */}
+        <Link href="/" className="navbar-brand">
+          Hackathon
+        </Link>
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded={isMenuOpen ? "true" : "false"}
+          aria-label="Toggle navigation"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
 
-              <NavbarLinkExtended
-                href={"/"}
-                style={{
-                  color: '#fff',
-                }}
-              >
-                Hachathon
-              </NavbarLinkExtended>
-
-              <NavbarLink
-                href={"/"}
-              >
-                Ambientes
-              </NavbarLink>
-
-              <NavbarLink
-                href={"/reserva"}
-              >
-                Reserva
-              </NavbarLink>
-
-            </NavbarLinkContainer>
-          </LeftContainer>
-          <RightContainer>
-            <NavbarLinkExtended
-              href={'/login'}
-            >
-              LogOut
-            </NavbarLinkExtended>
-          </RightContainer>
-        </NavbarInnerContainer>
-      </NavbarContainer>
-    </>
-  )
-}
+        {/* Navbar links */}
+        <div className={`collapse navbar-collapse ${isMenuOpen ? 'show' : ''}`} id="navbarNav">
+          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+            <li className="nav-item">
+              <Link className="nav-link" href="/">Ambientes</Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" href="/reserva">Reserva</Link>
+            </li>
+          </ul>
+          <ul className="navbar-nav ms-auto">
+            <li className="nav-item">
+              <Link className="nav-link" href="/login">LogOut</Link>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  );
+};

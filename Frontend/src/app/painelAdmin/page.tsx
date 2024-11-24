@@ -1,10 +1,14 @@
 'use client';
 import { MenuAdmin } from "@/components/MenuAdmin";
 import React, { useState, useEffect } from 'react';
-import { AmbientCard, AmbientDetail, AmbientListContainer, AmbientName, ErrorMessage, PageContainer, Title } from './style';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Card } from "@/components/Card";
+import { Footer } from "@/components/Footer";
+
 const AmbientListPage = () => {
     const [ambientList, setAmbientList] = useState<any[]>([]);
     const [error, setError] = useState<string | null>(null);
+
     // Função para buscar os ambientes da API
     const fetchAmbientes = async () => {
         try {
@@ -19,35 +23,35 @@ const AmbientListPage = () => {
             setError('Não foi possível carregar a lista de ambientes.');
         }
     };
+
     useEffect(() => {
         fetchAmbientes(); // Carrega os ambientes ao montar o componente
     }, []);
+
     return (
         <>
             <MenuAdmin />
-            <PageContainer>
-                <Title>Lista de Ambientes</Title>
-                {error ? (
-                    <ErrorMessage>{error}</ErrorMessage>
-                ) : (
-                    <AmbientListContainer>
-                        {ambientList.length > 0 ? (
-                            ambientList.map((ambient) => (
-                                <AmbientCard key={ambient.id}>
-                                    <AmbientName>{ambient.nome}</AmbientName>
-                                    <AmbientDetail>Tipo: {ambient.tipo}</AmbientDetail>
-                                    <AmbientDetail>Descrição: {ambient.descricao}</AmbientDetail>
-                                    <AmbientDetail>Status: {ambient.status}</AmbientDetail>
-                                </AmbientCard>
-                            ))
-                        ) : (
-                            <p>Não há ambientes cadastrados no momento.</p>
-                        )}
-                    </AmbientListContainer>
-                )}
-            </PageContainer>
-            
+            <div className="container my-5 text-center">
+                <h1 className="mb-4">Ambientes cadastrados</h1>
+                {error && <p className="text-danger">{error}</p>}
+                <div className="row justify-content-center">
+                    {ambientList.map((ambient) => (
+                        <div className="col-sm-12 col-md-6 col-lg-4 mb-4 d-flex justify-content-center" key={ambient.id}>
+                            <Card
+                                id={ambient.id}
+                                nome={ambient.nome}
+                                foto={ambient.foto}
+                                descricao={ambient.descricao}
+                                status={ambient.status}
+                                tipo={ambient.tipo}
+                            />
+                        </div>
+                    ))}
+                </div>
+            </div>
+            <Footer />
         </>
     );
 };
+
 export default AmbientListPage;

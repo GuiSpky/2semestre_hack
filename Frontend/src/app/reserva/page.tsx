@@ -2,17 +2,6 @@
 
 import { useState, useEffect } from "react";
 import axios from "axios";
-import {
-  PageContainer,
-  Title,
-  ErrorMessage,
-  AmbientListContainer,
-  FormContainer,
-  Form,
-  Input,
-  Select,
-  SubmitButton,
-} from "./style"; // Supondo que você tenha estilos definidos
 import { Footer } from "@/components/Footer";
 import { Menu } from "@/components/Menu";
 import { Card } from "@/components/Card";
@@ -70,63 +59,75 @@ const ReservaPage = () => {
   return (
     <>
       <Menu />
-      <PageContainer>
-        <Title>Lista de Ambientes</Title>
-        {error && <ErrorMessage>{error}</ErrorMessage>}
-        {successMessage && <p>{successMessage}</p>}
+      <div className="container">
+        <h1 className="text-center my-4">Lista de Ambientes</h1>
+        {error && <div className="alert alert-danger">{error}</div>}
+        {successMessage && <div className="alert alert-success">{successMessage}</div>}
 
         {/* Formulário de Reserva */}
-        <FormContainer>
-          <Form onSubmit={handleReserva}>
-            <Title>Fazer Reserva</Title>
-            <Select
-              value={selectedAmbiente || ""}
-              onChange={(e) => setSelectedAmbiente(Number(e.target.value))}
-            >
-              <option value="" disabled hidden>
-                Selecione um ambiente
-              </option>
-              {ambientList.map((ambient: any) => (
-                <option key={ambient.id} value={ambient.id}>
-                  {ambient.nome}
+        <div className="card p-4 mb-4">
+          <h2 className="text-center">Fazer Reserva</h2>
+          <form onSubmit={handleReserva}>
+            <div className="mb-3">
+              <select
+                className="form-select"
+                value={selectedAmbiente || ""}
+                onChange={(e) => setSelectedAmbiente(Number(e.target.value))}
+              >
+                <option value="" disabled hidden>
+                  Selecione um ambiente
                 </option>
-              ))}
-            </Select>
-            <Input
-              type="time"
-              value={horarioInicio}
-              onChange={(e) => setHorarioInicio(e.target.value)}
-              placeholder="Horário de Início"
-            />
-            <Input
-              type="time"
-              value={horarioFim}
-              onChange={(e) => setHorarioFim(e.target.value)}
-              placeholder="Horário de Fim"
-            />
-            <SubmitButton type="submit">Reservar</SubmitButton>
-          </Form>
-        </FormContainer>
+                {ambientList.map((ambient: any) => (
+                  <option key={ambient.id} value={ambient.id}>
+                    {ambient.nome}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="mb-3">
+              <input
+                type="time"
+                className="form-control"
+                value={horarioInicio}
+                onChange={(e) => setHorarioInicio(e.target.value)}
+                placeholder="Horário de Início"
+              />
+            </div>
+            <div className="mb-3">
+              <input
+                type="time"
+                className="form-control"
+                value={horarioFim}
+                onChange={(e) => setHorarioFim(e.target.value)}
+                placeholder="Horário de Fim"
+              />
+            </div>
+            <button type="submit" className="btn btn-success w-100">
+              Reservar
+            </button>
+          </form>
+        </div>
 
         {/* Lista de Ambientes */}
-        <AmbientListContainer>
+        <div className="row">
           {ambientList.length > 0 ? (
             ambientList.map((ambient: any) => (
-              <Card
-                key={ambient.id}
-                id={ambient.id}
-                nome={ambient.nome}
-                foto={ambient.foto}
-                descricao={ambient.descricao}
-                status={ambient.status}
-                tipo={ambient.tipo}
-              />
+              <div className="col-md-4 mb-4" key={ambient.id}>
+                <Card
+                  id={ambient.id}
+                  nome={ambient.nome}
+                  foto={ambient.foto}
+                  descricao={ambient.descricao}
+                  status={ambient.status}
+                  tipo={ambient.tipo}
+                />
+              </div>
             ))
           ) : (
             <p>Não há ambientes cadastrados no momento.</p>
           )}
-        </AmbientListContainer>
-      </PageContainer>
+        </div>
+      </div>
       <Footer />
     </>
   );

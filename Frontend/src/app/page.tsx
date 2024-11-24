@@ -6,6 +6,7 @@ import { Menu } from "@/components/Menu";
 import { ISala } from "@/interfaces";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 interface IReqSala {
   data: Array<ISala>;
@@ -32,20 +33,21 @@ export default function Home() {
   return (
     <>
       <Menu />
-      <div style={{ paddingLeft: '6%', paddingRight: '6%', textAlign: 'center' }}>
-        <h1>Ambientes</h1>
-        <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
-          {error && <p>{error}</p>}
+      <div className="container my-5 text-center">
+        <h1 className="mb-4">Ambientes</h1>
+        {error && <p className="text-danger">{error}</p>}
+        <div className="row justify-content-center">
           {ambientList.map((ambient) => (
-            <Card
-              key={ambient.id}
-              id={ambient.id}
-              nome={ambient.nome}
-              foto={ambient.foto}
-              descricao={ambient.descricao}
-              status={ambient.status}
-              tipo={ambient.tipo}
-            />
+            <div className="col-sm-12 col-md-6 col-lg-4 mb-4 d-flex justify-content-center" key={ambient.id}>
+              <Card
+                id={ambient.id}
+                nome={ambient.nome}
+                foto={ambient.foto}
+                descricao={ambient.descricao}
+                status={ambient.status}
+                tipo={ambient.tipo}
+              />
+            </div>
           ))}
         </div>
       </div>
