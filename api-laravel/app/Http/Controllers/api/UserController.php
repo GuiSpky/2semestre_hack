@@ -8,6 +8,12 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+    public function index()
+    {
+        $dados = User::all();
+        return ($dados);
+    }
+
     public function store(Request $request)
     {
         $dados = $request->only(["name","email","cargo","password"]);
