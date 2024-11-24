@@ -48,7 +48,7 @@ export const SectionTitle = styled.h2`
 `;
 
 export const CreateAmbient = styled.div`
-  display: flex;
+  display: block;
   align-items: center;
   margin-bottom: 20px;
 `;
@@ -60,6 +60,14 @@ export const AmbientInput = styled.input`
   border-radius: 4px;
   margin-right: 10px;
   width: 250px;
+`;
+export const AmbientInputImage = styled.input`
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-right: 10px;
+  width: 350px;
 `;
 
 export const Select = styled.select`

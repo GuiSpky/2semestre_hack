@@ -1,6 +1,7 @@
 'use client'; // Add this at the top to mark the component as a Client Component
 
 import { Card } from "@/components/Card";
+import { Footer } from "@/components/Footer";
 import { Menu } from "@/components/Menu";
 import { ISala } from "@/interfaces";
 import axios from "axios";
@@ -35,19 +36,20 @@ export default function Home() {
         <h1>Ambientes</h1>
         <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
           {error && <p>{error}</p>}
-          {ambientList.map((sala) => (
+          {ambientList.map((ambient) => (
             <Card
-              key={sala.id}
-              id={sala.id}
-              nome={sala.nome}
-              foto={sala.foto}
-              descricao={sala.descricao}
-              status={sala.status}
-              tipo={sala.tipo}
+              key={ambient.id}
+              id={ambient.id}
+              nome={ambient.nome}
+              foto={ambient.foto}
+              descricao={ambient.descricao}
+              status={ambient.status}
+              tipo={ambient.tipo}
             />
           ))}
         </div>
       </div>
+      <Footer />
     </>
   );
 }

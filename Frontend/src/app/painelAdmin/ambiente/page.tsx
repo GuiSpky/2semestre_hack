@@ -15,7 +15,8 @@ import {
   UpdateButton,
   ErrorMessage,
   DeleteButton,
-  Select
+  Select,
+  AmbientInputImage
 } from './style';
 import { MenuAdmin } from '@/components/MenuAdmin';
 
@@ -25,6 +26,7 @@ const Admin = () => {
   const [ambientType, setAmbientType] = useState<string>(''); // Tipo do ambiente
   const [ambientDescription, setAmbientDescription] = useState<string>(''); // Descrição do ambiente
   const [ambientStatus, setAmbientStatus] = useState<string>(''); // Status do ambiente
+  const [ambientFoto, setAmbientFoto] = useState<string>('');
   const [ambientList, setAmbientList] = useState<any[]>([]); // Lista de ambientes
   const [selectedAmbient, setSelectedAmbient] = useState<any | null>(null); // Ambiente selecionado para edição
   const [error, setError] = useState<string | null>(null); // Mensagem de erro para duplicação
@@ -66,7 +68,8 @@ const Admin = () => {
             nome: ambientName,
             tipo: ambientType,
             descricao: ambientDescription,
-            status: ambientStatus
+            status: ambientStatus,
+            foto: ambientFoto
           })
         });
 
@@ -82,6 +85,7 @@ const Admin = () => {
           setAmbientType('');
           setAmbientDescription('');
           setAmbientStatus('');
+          setAmbientFoto('');
           setError(null); // Limpa a mensagem de erro
         }
       } catch (error) {
@@ -122,11 +126,12 @@ const Admin = () => {
     setAmbientType(ambient.tipo); // Preenche o tipo
     setAmbientDescription(ambient.descricao); // Preenche a descrição
     setAmbientStatus(ambient.status); // Preenche o status
+    setAmbientFoto(ambient.foto);
   };
 
   // Função para salvar a alteração do nome do ambiente
   const handleUpdateAmbient = async () => {
-    if (selectedAmbient && ambientName && ambientType && ambientDescription && ambientStatus) {
+    if (selectedAmbient && ambientName && ambientType && ambientDescription && ambientStatus && ambientFoto) {
       try {
         const response = await fetch(`http://127.0.0.1:8000/api/ambientes/${selectedAmbient.id}`, {
           method: 'PUT',
@@ -137,7 +142,8 @@ const Admin = () => {
             nome: ambientName,
             tipo: ambientType,
             descricao: ambientDescription,
-            status: ambientStatus
+            status: ambientStatus,
+            foto: ambientFoto
           })
         });
 
@@ -155,6 +161,7 @@ const Admin = () => {
           setAmbientType('');
           setAmbientDescription('');
           setAmbientStatus('');
+          setAmbientFoto('');
           setError(null);
         } else {
           const errorData = await response.json();
@@ -210,6 +217,13 @@ const Admin = () => {
               <option value="Reservado">Reservado</option>
               <option value="Em manutenção">Em manutenção</option>
             </Select>
+            <AmbientInputImage
+              type="file"
+              accept="image/*"
+              value={ambientFoto}
+              onChange={(e) => setAmbientFoto(e.target.value)}
+              placeholder="Imagem"
+            />
             <CreateButton onClick={handleCreateAmbient}>Criar Novo Ambiente</CreateButton>
 
             {/* Exibe a mensagem de erro se o nome do ambiente for duplicado */}

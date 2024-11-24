@@ -1,122 +1,135 @@
-// app/reserva/page.tsx
-'use client';
+"use client";
 
-import React, { useState } from 'react';
+import { useState, useEffect } from "react";
+import axios from "axios";
 import {
-  ReservaContainer,
-  ReservaTitle,
-  ReservaSection,
-  SectionTitle,
-  AmbienteSelect,
-  DateTimeInput,
-  CreateReservaButton,
-  AmbienteDetails,
-  AmbienteInfo,
-  ErrorMessage
-} from './style'; // Estilos personalizados para a página de reserva
-import { Footer } from '@/components/Footer';
-import { Menu } from '@/components/Menu';
+  PageContainer,
+  Title,
+  ErrorMessage,
+  AmbientListContainer,
+  FormContainer,
+  Form,
+  Input,
+  Select,
+  SubmitButton,
+} from "./style"; // Supondo que você tenha estilos definidos
+import { Footer } from "@/components/Footer";
+import { Menu } from "@/components/Menu";
+import { Card } from "@/components/Card";
 
-const ambientes = [
-  {
-    id: 1,
-    nome: 'Sala de Reuniões A',
-    capacidade: 10,
-    equipamentos: 'Projetor, Tela de Projeção, Som',
-    horarioFuncionamento: '09:00 - 18:00',
-    localizacao: 'Andar 1, Bloco A',
-  },
-  {
-    id: 2,
-    nome: 'Auditório B',
-    capacidade: 50,
-    equipamentos: 'Microfone, Projetor, Sistema de Som',
-    horarioFuncionamento: '08:00 - 20:00',
-    localizacao: 'Andar 2, Bloco B',
-  }
-];
+const ReservaPage = () => {
+  const [ambientList, setAmbientList] = useState([]);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedAmbiente, setSelectedAmbiente] = useState<number | null>(null);
+  const [horarioInicio, setHorarioInicio] = useState<string>("");
+  const [horarioFim, setHorarioFim] = useState<string>("");
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-const reservasExistentes = [
-  { ambienteId: 1, data: '2024-11-22', horario: '10:00' },
-  { ambienteId: 2, data: '2024-11-23', horario: '14:00' },
-];
-
-const Reserva = () => {
-  const [ambienteId, setAmbienteId] = useState<number>(0);
-  const [data, setData] = useState<string>('');
-  const [horario, setHorario] = useState<string>('');
-  const [errorMessage, setErrorMessage] = useState<string>('');
-
-  const handleReserva = () => {
-    if (!data || !horario) {
-      setErrorMessage('Por favor, selecione uma data e horário.');
-      return;
+  const fetchAmbientes = async () => {
+    try {
+      const response = await axios.get("http://127.0.0.1:8000/api/ambientes");
+      setAmbientList(response.data.data); // Acesse a propriedade "data" do response
+      setError(null);
+    } catch (err) {
+      console.error("Erro ao buscar ambientes:", err);
+      setError("Não foi possível carregar a lista de ambientes.");
     }
-
-    // Verifica se já existe uma reserva para o ambiente, data e horário
-    const reservaDuplicada = reservasExistentes.some(
-      (reserva) => reserva.ambienteId === ambienteId && reserva.data === data && reserva.horario === horario
-    );
-
-    if (reservaDuplicada) {
-      setErrorMessage('Este horário já está reservado para o ambiente escolhido.');
-      return;
-    }
-
-    // Se não for duplicada, realiza a reserva
-    reservasExistentes.push({ ambienteId, data, horario });
-    setErrorMessage('');
-    alert('Reserva realizada com sucesso!');
   };
 
-  const ambienteSelecionado = ambientes.find((ambiente) => ambiente.id === ambienteId);
+  useEffect(() => {
+    fetchAmbientes(); // Chama a API para buscar os ambientes ao carregar o componente
+  }, []);
+
+  const handleReserva = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!selectedAmbiente || !horarioInicio || !horarioFim) {
+      setError("Preencha todos os campos.");
+      return;
+    }
+
+    try {
+      await axios.post("http://127.0.0.1:8000/api/reservas", {
+        id_ambiente: selectedAmbiente,
+        horario_inicio: horarioInicio,
+        horario_fim: horarioFim,
+      });
+
+      setSuccessMessage("Reserva realizada com sucesso!");
+      setError(null);
+      setSelectedAmbiente(null);
+      setHorarioInicio("");
+      setHorarioFim("");
+      fetchAmbientes(); // Atualiza a lista de ambientes
+    } catch (err) {
+      console.error("Erro ao realizar a reserva:", err);
+      setError("Erro ao realizar a reserva. Tente novamente mais tarde.");
+    }
+  };
 
   return (
     <>
       <Menu />
-      <ReservaContainer>
-        <ReservaTitle>Faça sua Reserva</ReservaTitle>
+      <PageContainer>
+        <Title>Lista de Ambientes</Title>
+        {error && <ErrorMessage>{error}</ErrorMessage>}
+        {successMessage && <p>{successMessage}</p>}
 
-        <ReservaSection>
-          <SectionTitle>Selecione o Ambiente</SectionTitle>
-          <AmbienteSelect onChange={(e) => setAmbienteId(Number(e.target.value))}>
-            <option value={0}>Selecione um ambiente</option>
-            {ambientes.map((ambiente) => (
-              <option key={ambiente.id} value={ambiente.id}>
-                {ambiente.nome}
+        {/* Formulário de Reserva */}
+        <FormContainer>
+          <Form onSubmit={handleReserva}>
+            <Title>Fazer Reserva</Title>
+            <Select
+              value={selectedAmbiente || ""}
+              onChange={(e) => setSelectedAmbiente(Number(e.target.value))}
+            >
+              <option value="" disabled hidden>
+                Selecione um ambiente
               </option>
-            ))}
-          </AmbienteSelect>
+              {ambientList.map((ambient: any) => (
+                <option key={ambient.id} value={ambient.id}>
+                  {ambient.nome}
+                </option>
+              ))}
+            </Select>
+            <Input
+              type="time"
+              value={horarioInicio}
+              onChange={(e) => setHorarioInicio(e.target.value)}
+              placeholder="Horário de Início"
+            />
+            <Input
+              type="time"
+              value={horarioFim}
+              onChange={(e) => setHorarioFim(e.target.value)}
+              placeholder="Horário de Fim"
+            />
+            <SubmitButton type="submit">Reservar</SubmitButton>
+          </Form>
+        </FormContainer>
 
-          {ambienteSelecionado && (
-            <AmbienteDetails>
-              <h3>Detalhes do Ambiente</h3>
-              <AmbienteInfo><strong>Capacidade:</strong> {ambienteSelecionado.capacidade} pessoas</AmbienteInfo>
-              <AmbienteInfo><strong>Equipamentos:</strong> {ambienteSelecionado.equipamentos}</AmbienteInfo>
-              <AmbienteInfo><strong>Horário de Funcionamento:</strong> {ambienteSelecionado.horarioFuncionamento}</AmbienteInfo>
-              <AmbienteInfo><strong>Localização:</strong> {ambienteSelecionado.localizacao}</AmbienteInfo>
-            </AmbienteDetails>
+        {/* Lista de Ambientes */}
+        <AmbientListContainer>
+          {ambientList.length > 0 ? (
+            ambientList.map((ambient: any) => (
+              <Card
+                key={ambient.id}
+                id={ambient.id}
+                nome={ambient.nome}
+                foto={ambient.foto}
+                descricao={ambient.descricao}
+                status={ambient.status}
+                tipo={ambient.tipo}
+              />
+            ))
+          ) : (
+            <p>Não há ambientes cadastrados no momento.</p>
           )}
-
-          <SectionTitle>Selecione a Data e Horário</SectionTitle>
-          <DateTimeInput
-            type="date"
-            value={data}
-            onChange={(e) => setData(e.target.value)}
-          />
-          <DateTimeInput
-            type="time"
-            value={horario}
-            onChange={(e) => setHorario(e.target.value)}
-          />
-
-          {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-
-          <CreateReservaButton onClick={handleReserva}>Reservar Ambiente</CreateReservaButton>
-        </ReservaSection>
-      </ReservaContainer>
+        </AmbientListContainer>
+      </PageContainer>
+      <Footer />
     </>
   );
 };
 
-export default Reserva;
+export default ReservaPage;

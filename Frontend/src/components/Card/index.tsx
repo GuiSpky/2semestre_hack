@@ -1,6 +1,6 @@
 "use client"
 import Image from "next/image"
-import { Button, CardBody, TextButton, TextStatus, Title, TitleTipo} from "./style"
+import { Button, CardBody, TextButton, TextStatus, Title, TitleTipo } from "./style"
 import { ISala } from "@/interfaces"
 import { useRouter } from "next/navigation"
 
@@ -10,18 +10,18 @@ export const Card = (props: ISala) => {
 
     return (
         <CardBody>
-            {/* <Image
-                src={`/imagens/${props.imagemg}`}
+            <Image
+                src={`\/C:/fakepath/${props.foto}`}
                 alt={props.nome}
                 width={250}
                 height={200}
-            /> */}
+            />
             <Title>{props.nome}</Title>
             <TitleTipo>{props.tipo}</TitleTipo>
             <TextStatus status={props.status}>{props.status}</TextStatus>
             <Button
                 onClick={() => {
-                    router.push('/sala/'+props.id)
+                    router.push('/sala/' + props.id)
                 }}
             >
                 <TextButton>Detalhes</TextButton>

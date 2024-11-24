@@ -20,7 +20,6 @@ export default function RootLayout({
         <StyledComponentsRegistry>
           <GlobalStyle />
           {children}
-          <Footer /> {/* Adicionando o Footer aqui */}
         </StyledComponentsRegistry>
       </body>
     </html>

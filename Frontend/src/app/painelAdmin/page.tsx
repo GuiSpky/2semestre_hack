@@ -46,6 +46,7 @@ const AmbientListPage = () => {
                     </AmbientListContainer>
                 )}
             </PageContainer>
+            
         </>
     );
 };

@@ -8,13 +8,8 @@ export const FooterContainer = styled.footer`
   text-align: center;
   padding: 20px;
   bottom: 0;
-  width: 100%;
+  width: vw;
   box-shadow: 0px -2px 10px rgba(0, 0, 0, 0.2);
-  position: fixed;
-<<<<<<< HEAD
-=======
-  
->>>>>>> 9aaef29fd7be270a3c53a3967fcec375550e7f64
 `;
 
 export const FooterText = styled.p`
