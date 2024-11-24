@@ -2,7 +2,17 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Anchor, Button, Container, ErrorMessage, Form, Input, Select, Text, Title } from "./style";
+import {
+  Anchor,
+  Button,
+  Container,
+  ErrorMessage,
+  Form,
+  Input,
+  Select,
+  Text,
+  Title
+} from "./style";
 
 const RegisterPage = () => {
   const [name, setName] = useState("");
@@ -29,12 +39,29 @@ const RegisterPage = () => {
 
     setError(""); // Limpa os erros
 
-    // Simulação de registro (substituir pelo backend futuramente)
-    if (email !== "existing@example.com") {
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          email,
+          cargo,
+          password
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        setError(errorData.message || "Erro ao registrar usuário.");
+        return;
+      }
+
       alert("Registro realizado com sucesso!");
       router.push("/login"); // Redireciona para a página de login
-    } else {
-      setError("E-mail já registrado.");
+    } catch (err) {
+      console.error("Erro ao registrar:", err);
+      setError("Erro de conexão. Tente novamente mais tarde.");
     }
   };
 
@@ -80,7 +107,8 @@ const RegisterPage = () => {
         {error && <ErrorMessage>{error}</ErrorMessage>}
         <Button type="submit">Registrar</Button>
         <Text>
-          Já possui conta? <Anchor onClick={() => router.push("/login")}>Login</Anchor>
+          Já possui conta?{" "}
+          <Anchor onClick={() => router.push("/login")}>Login</Anchor>
         </Text>
       </Form>
     </Container>

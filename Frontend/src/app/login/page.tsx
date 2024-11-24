@@ -10,7 +10,7 @@ const LoginPage = () => {
   const [error, setError] = useState("");
   const router = useRouter();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // Validação básica
@@ -21,13 +21,31 @@ const LoginPage = () => {
 
     setError(""); // Limpa erros
 
-    // Simulação de autenticação (substituir pelo backend futuramente)
-    if (email === "user@example.com" && password === "password") {
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          email,
+          password
+        }),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        setError(errorData.message || "E-mail ou senha inválidos.");
+        return;
+      }
+
       alert("Login realizado com sucesso!");
       router.push("/"); // Redireciona para a Home
-    } else {
-      setError("E-mail ou senha inválidos.");
+
+    } catch (err) {
+      console.error("Erro ao realizar login:", err);
+      setError("Ocorreu um erro no servidor. Tente novamente mais tarde.");
     }
+
   };
 
   return (
