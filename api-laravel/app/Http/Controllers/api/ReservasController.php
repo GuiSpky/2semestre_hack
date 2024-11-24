@@ -16,21 +16,22 @@ class ReservasController extends Controller
         return ReservasResource::collection($dados);
     }
 
-    public function store(Request $request)
+    public function store(ReservasRequest $request)
     {
-        $dados = $request->only(["id_usuario","id_ambiente","horario_inicio","horario_fim","status"]);
-
-        // dd($dados);
-
+        // Os dados já foram validados, agora podemos criar a reserva
         Reservas::create([
-            "id_usuario"=>$request->id_usuario,
-	        "id_ambiente"=>$request->id_ambiente,
-	        "horario_inicio"=>$request->horario_inicio,
-	        "horario_fim"=>$request->horario_fim,
-	        "status"=>$request->status
+            "id_usuario" => $request->id_usuario,
+            "id_ambiente" => $request->id_ambiente,
+            "horario_inicio" => $request->hora_inicio,
+            "horario_fim" => $request->hora_fim,
+            "status" => $request->status
         ]);
-        return($dados);
+
+        return response()->json([
+            'message' => 'Reserva criada com sucesso!'
+        ], 201);  // Resposta de sucesso
     }
+
 
     public function show(string $id)
     {
@@ -44,11 +45,11 @@ class ReservasController extends Controller
         $reserva = Reservas::findOrFail($id);
 
         $reserva->update([
-            "id_usuario"=>$request->id_usuario,
-	        "id_ambiente"=>$request->id_ambiente,
-	        "horario_inicio"=>$request->horario_inicio,
-	        "horario_fim"=>$request->horario_fim,
-	        "status"=>$request->status
+            "id_usuario" => $request->id_usuario,
+            "id_ambiente" => $request->id_ambiente,
+            "horario_inicio" => $request->horario_inicio,
+            "horario_fim" => $request->horario_fim,
+            "status" => $request->status
         ]);
 
 

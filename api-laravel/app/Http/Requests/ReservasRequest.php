@@ -22,7 +22,7 @@ class ReservasRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // Verifica se hora_inicio e hora_fim estão no formato correto de HH:mm
+            // Valida se hora_inicio está no formato correto e dentro do intervalo permitido
             'hora_inicio' => [
                 'required',
                 'date_format:H:i', // Verifica se o campo está no formato de hora adequado
@@ -36,6 +36,7 @@ class ReservasRequest extends FormRequest
                 },
             ],
 
+            // Valida se hora_fim está no formato correto e dentro do intervalo permitido
             'hora_fim' => [
                 'required',
                 'date_format:H:i', // Verifica se o campo está no formato de hora adequado
@@ -47,19 +48,7 @@ class ReservasRequest extends FormRequest
                         $fail('A hora de fim deve estar entre 09:00 e 22:00.');
                     }
                 },
-            ],
-
-            // Validar que hora_fim é depois de hora_inicio
-            'hora_fim_after_inicio' => [
-                'required',
-                function ($attribute, $value, $fail) {
-                    $hora_inicio = $this->input('hora_inicio'); // Hora de início da requisição
-
-                    // Verifique se hora_fim é após hora_inicio
-                    if (strtotime($value) <= strtotime($hora_inicio)) {
-                        $fail('A hora de fim deve ser posterior à hora de início.');
-                    }
-                },
+                'after:hora_inicio', // Garante que a hora de fim seja depois de hora_inicio
             ],
         ];
     }
