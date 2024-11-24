@@ -1,3 +1,4 @@
+// app/reserva/page.tsx
 'use client';
 
 import React, { useState } from 'react';
@@ -35,46 +36,38 @@ const ambientes = [
   }
 ];
 
+const reservasExistentes = [
+  { ambienteId: 1, data: '2024-11-22', horario: '10:00' },
+  { ambienteId: 2, data: '2024-11-23', horario: '14:00' },
+];
+
 const Reserva = () => {
   const [ambienteId, setAmbienteId] = useState<number>(0);
   const [data, setData] = useState<string>('');
   const [horario, setHorario] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string>('');
 
-  const handleReserva = async () => {
+  const handleReserva = () => {
     if (!data || !horario) {
       setErrorMessage('Por favor, selecione uma data e horário.');
       return;
     }
 
+    // Verifica se já existe uma reserva para o ambiente, data e horário
+    const reservaDuplicada = reservasExistentes.some(
+      (reserva) => reserva.ambienteId === ambienteId && reserva.data === data && reserva.horario === horario
+    );
 
-    // Realiza a reserva chamando a API
-    try {
-      const response = await fetch('http://127.0.0.1:8000/api/reservas', {  // A URL da sua API
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          id_usuario: 1,  // Substitua com o ID real do usuário, se necessário
-          id_ambiente: ambienteId,
-          horario_inicio: data + ' ' + horario,  // Data e horário no formato correto
-          horario_fim: data + ' ' + horario,  // Ajuste a lógica se necessário
-          status: 'pendente',  // Status padrão (ajuste conforme necessário)
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error('Falha ao realizar a reserva');
-      }
-
-      setErrorMessage('');
-      alert('Reserva realizada com sucesso!');
-    
-    } catch (error) {
-      console.error('Erro ao realizar a reserva:', error);
-      setErrorMessage('Erro ao realizar a reserva.');
+    if (reservaDuplicada) {
+      setErrorMessage('Este horário já está reservado para o ambiente escolhido.');
+      return;
     }
-  };
 
+    // Se não for duplicada, realiza a reserva
+    reservasExistentes.push({ ambienteId, data, horario });
+    setErrorMessage('');
+    alert('Reserva realizada com sucesso!');
+  };
 
   const ambienteSelecionado = ambientes.find((ambiente) => ambiente.id === ambienteId);
 
