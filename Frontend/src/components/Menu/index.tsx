@@ -10,24 +10,24 @@ interface ICategoria {
 
 export const Menu = () => {
 
-  const [categorias, setCategorias] = useState<Array<ICategoria>>([]);
+  // const [categorias, setCategorias] = useState<Array<ICategoria>>([]);
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    axios.get(
-      process.env.NEXT_PUBLIC_API_URL
-      +
-      '/categorias'
-    )
-      .then((resposta) => {
-        // Quando é Array [ 123, 456 ]
-        setCategorias(resposta.data)
-      })
-      .catch((err: AxiosError) => {
-        console.log(err)
-      })
+  //   axios.get(
+  //     process.env.NEXT_PUBLIC_API_URL
+  //     +
+  //     '/categorias'
+  //   )
+  //     .then((resposta) => {
+  //       // Quando é Array [ 123, 456 ]
+  //       setCategorias(resposta.data)
+  //     })
+  //     .catch((err: AxiosError) => {
+  //       console.log(err)
+  //     })
 
-  }, [])
+  // }, [])
 
   return (
     <>

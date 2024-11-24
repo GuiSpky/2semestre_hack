@@ -62,6 +62,15 @@ export const AmbientInput = styled.input`
   width: 250px;
 `;
 
+export const Select = styled.select`
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-right: 10px;
+  width: 250px;
+`;
+
 export const CreateButton = styled.button`
   padding: 10px 20px;
   background-color: #4caf50;

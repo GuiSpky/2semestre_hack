@@ -14,7 +14,8 @@ import {
   ReportsButton,
   UpdateButton,
   ErrorMessage,
-  DeleteButton
+  DeleteButton,
+  Select
 } from './style';
 import { MenuAdmin } from '@/components/MenuAdmin';
 
@@ -198,12 +199,17 @@ const Admin = () => {
               onChange={(e) => setAmbientDescription(e.target.value)}
               placeholder="Descrição do ambiente"
             />
-            <AmbientInput
-              type="text"
+            <Select
               value={ambientStatus}
               onChange={(e) => setAmbientStatus(e.target.value)}
-              placeholder="Status do ambiente"
-            />
+            >
+              <option value="" disabled hidden>
+                Selecione o Status
+              </option>
+              <option value="Disponível">Disponível</option>
+              <option value="Reservado">Reservado</option>
+              <option value="Em manutenção">Em manutenção</option>
+            </Select>
             <CreateButton onClick={handleCreateAmbient}>Criar Novo Ambiente</CreateButton>
 
             {/* Exibe a mensagem de erro se o nome do ambiente for duplicado */}

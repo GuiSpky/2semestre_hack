@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Anchor, Button, Container, ErrorMessage, Form, Input, Text, Title } from "./style";
+import { Anchor, Button, Container, ErrorMessage, Form, Input, Select, Text, Title } from "./style";
 
 const RegisterPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [cargo, setCargo] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
@@ -16,7 +17,7 @@ const RegisterPage = () => {
     e.preventDefault();
 
     // Validação básica
-    if (!name || !email || !password || !confirmPassword) {
+    if (!name || !email || !cargo || !password || !confirmPassword) {
       setError("Preencha todos os campos.");
       return;
     }
@@ -53,6 +54,17 @@ const RegisterPage = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
+        <Select
+          value={cargo}
+          onChange={(e) => setCargo(e.target.value)}
+        >
+          <option value="" disabled hidden>
+            Selecione seu Cargo
+          </option>
+          <option value="Aluno">Aluno</option>
+          <option value="Professor">Professor</option>
+          <option value="Diretor">Diretor</option>
+        </Select>
         <Input
           type="password"
           placeholder="Senha"
