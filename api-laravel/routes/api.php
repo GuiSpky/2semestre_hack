@@ -19,7 +19,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 Route::get('/user', [AuthController::class, 'user'])->middleware('auth:sanctum');
 
 Route::apiResource('/users', UserController::class);
-Route::apiResource('/users/deletar/{id}', [UserController::class, 'destroy']);
+Route::delete('/users/deletar/{id}', [UserController::class, 'destroy']);
+
 
 Route::apiResource('ambientes', AmbienteController::class);
 Route::delete('/ambientes/deletar/{id}', [AmbienteController::class, 'destroy']);
