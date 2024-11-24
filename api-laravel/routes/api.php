@@ -4,6 +4,7 @@ use App\Http\Controllers\api\AmbienteController;
 use App\Http\Controllers\api\HistoricosController;
 use App\Http\Controllers\api\NotificacoesController;
 use App\Http\Controllers\api\ReservasController;
+use App\Http\Controllers\api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,6 +17,9 @@ use App\Http\Controllers\AuthController;
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 Route::get('/user', [AuthController::class, 'user'])->middleware('auth:sanctum');
+
+Route::apiResource('/users', UserController::class);
+Route::apiResource('/users/deletar/{id}', [UserController::class, 'destroy']);
 
 Route::apiResource('ambientes', AmbienteController::class);
 Route::delete('/ambientes/deletar/{id}', [AmbienteController::class, 'destroy']);
