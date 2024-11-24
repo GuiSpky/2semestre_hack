@@ -7,7 +7,9 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 use Illuminate\Http\Request;
 use Illuminate\Queue\Middleware\RateLimited;
 use Illuminate\Routing\Route;
-
+use Laravel\Sanctum\PersonalAccessToken;
+use Laravel\Sanctum\Sanctum;
+use PersonalAccessToken as GlobalPersonalAccessToken;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,13 +26,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // RateLimited::for('api', function(Request $request){
-        //     return limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
-        // });
-
-        // $this->routes(function(){
-        //     Route::middleware('api')->prefix('api')->group(base_path('routes/api.php'));
-
-        // });
+        Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);
     }
 }
