@@ -242,7 +242,11 @@ const Admin = () => {
                     <div>
                       {ambient.foto ? (
                         <img
+<<<<<<< HEAD
                           src={'http://127.0.0.1:8000/storage/' + ambient.foto}
+=======
+                          src={'http://127.0.0.1:8000/storage/'+ambient.foto}
+>>>>>>> e2a63e2fc3c0810b880805638f7ed305ed717382
                           alt={ambient.nome}
                           className="img-fluid"
                           style={{ maxWidth: '100px', maxHeight: '100px', marginRight: '10px', borderRadius: '5px' }}
