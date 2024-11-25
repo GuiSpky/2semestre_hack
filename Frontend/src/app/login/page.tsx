@@ -10,7 +10,7 @@ const LoginPage = () => {
   const [error, setError] = useState("");
   const router = useRouter();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // Validação básica
@@ -18,16 +18,31 @@ const LoginPage = () => {
       setError("Preencha todos os campos.");
       return;
     }
-
     setError(""); // Limpa erros
 
-    // Simulação de autenticação (substituir pelo backend futuramente)
-    if (email === "user@example.com" && password === "password") {
-      alert("Login realizado com sucesso!");
-      router.push("/"); // Redireciona para a Home
-    } else {
-      setError("E-mail ou senha inválidos.");
+    try {
+      // Requisição para autenticação
+      const response = await fetch('http://127.0.0.1:8000/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include', // Inclui cookies para autenticação
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        setError(errorData.message || "Erro ao fazer login. Tente novamente.");
+        return;
+      }
+
+      // Redireciona para a página inicial em caso de sucesso
+      router.push('/');
+    } catch (err) {
+      console.error("Erro ao tentar login:", err);
+      setError("Ocorreu um erro inesperado. Tente novamente.");
     }
+
+    await router.push('/')
   };
 
   return (
