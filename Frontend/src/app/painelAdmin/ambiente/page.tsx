@@ -88,6 +88,16 @@ const Admin = () => {
     setAmbientFoto(null); // Limpar a foto para não tentar atribuir valor programaticamente
   };
 
+  const handleClearFields = () => {
+    setAmbientName('');
+    setAmbientType('');
+    setAmbientDescription('');
+    setAmbientStatus('');
+    setAmbientFoto(null);
+    setSelectedAmbient(null);
+    setError(null); // Limpa a mensagem de erro, se houver
+  };
+
   // Função para salvar a alteração do nome do ambiente
   const handleUpdateAmbient = async () => {
     if (selectedAmbient && ambientName && ambientType && ambientDescription && ambientStatus) {
@@ -97,7 +107,7 @@ const Admin = () => {
         descricao: ambientDescription,
         status: ambientStatus,
       };
-  
+
       try {
         const response = await fetch(`http://127.0.0.1:8000/api/ambientes/${selectedAmbient.id}`, {
           method: 'PUT',
@@ -106,7 +116,8 @@ const Admin = () => {
           },
           body: JSON.stringify(updatedAmbient),
         });
-  
+
+
         if (response.ok) {
           const updatedData = await response.json();
           setAmbientList(
@@ -196,25 +207,27 @@ const Admin = () => {
             >
               <option value="" disabled hidden>Selecione o Status</option>
               <option value="Disponível">Disponível</option>
-              <option value="Reservado">Reservado</option>
               <option value="Em manutenção">Em manutenção</option>
             </select>
             <input
               type="file"
               className="form-control mb-2"
-              accept="image/*"
+              accept="image.*"
               onChange={(e) => e.target.files && setAmbientFoto(e.target.files[0])}
             />
             <div className="d-flex">
               {!selectedAmbient ? (
-                <button className="btn btn-success mb-3" onClick={handleCreateAmbient}>
+                <button className="btn btn-success mb-3 me-2" onClick={handleCreateAmbient}>
                   Criar Novo Ambiente
                 </button>
               ) : (
-                <button className="btn btn-primary mb-3" onClick={handleUpdateAmbient}>
+                <button className="btn btn-primary mb-3 me-2" onClick={handleUpdateAmbient}>
                   Salvar Alterações
                 </button>
               )}
+              <button className="btn btn-secondary mb-3" onClick={handleClearFields}>
+                Limpar Campos
+              </button>
             </div>
 
             {error && <p className="text-danger">{error}</p>}
@@ -229,7 +242,7 @@ const Admin = () => {
                     <div>
                       {ambient.foto ? (
                         <img
-                          src={`/imagens/${ambient.foto}`}
+                          src={'http://127.0.0.1:8000/storage/' + ambient.foto}
                           alt={ambient.nome}
                           className="img-fluid"
                           style={{ maxWidth: '100px', maxHeight: '100px', marginRight: '10px', borderRadius: '5px' }}
@@ -245,18 +258,18 @@ const Admin = () => {
                       <strong>{ambient.nome}</strong> - {ambient.tipo}
                     </div>
                     <div className="justify-content-end">
-                    <button
-                      className="btn btn-warning me-2 "
-                      onClick={() => handleSelectAmbient(ambient)}
-                    >
-                      Editar
-                    </button>
-                    <button
-                      className="btn btn-danger"
-                      onClick={() => handleDeleteAmbient(ambient.id)}
-                    >
-                      Excluir
-                    </button>
+                      <button
+                        className="btn btn-warning me-2 "
+                        onClick={() => handleSelectAmbient(ambient)}
+                      >
+                        Editar
+                      </button>
+                      <button
+                        className="btn btn-danger"
+                        onClick={() => handleDeleteAmbient(ambient.id)}
+                      >
+                        Excluir
+                      </button>
                     </div>
                   </li>
                 ))

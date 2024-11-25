@@ -11,7 +11,7 @@ export const Card = (props: ISala) => {
     <div className="card text-center p-3" style={{ maxWidth: "18rem", margin: "18px" }}>
       <h3>{props.nome}</h3>
       <Image
-        src={`/imagens/${props.foto}`}
+        src={`http://127.0.0.1:8000/storage/${props.foto}`}
         alt={props.nome}
         width={250}
         height={200}

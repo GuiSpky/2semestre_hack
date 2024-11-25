@@ -1,80 +1,100 @@
-"use client";
+'use client';
 
-import { Menu } from "@/components/Menu";
-import { ISala } from "@/interfaces";
-import axios from "axios";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Footer } from "@/components/Footer";
+import { Footer } from '@/components/Footer';
+import { Menu } from '@/components/Menu';
 
-export default function Sala({ params }: { params: { id: string } }) {
-  const [sala, setSala] = useState<ISala>();
+interface Ambient {
+  id: number;
+  nome: string;
+  tipo: string;
+  descricao: string;
+  status: string;
+  foto: string | null;
+}
+
+const SalaDetails = ({ params }: { params: { id: string } }) => {
+  const [ambient, setAmbient] = useState<Ambient | null>(null); // Armazena os dados do ambiente
+  const [error, setError] = useState<string | null>(null); // Mensagem de erro caso não encontre o ambiente
+  const { id } = params; // Pega o id diretamente de params
+
+  // Função para buscar os detalhes do ambiente
+  const fetchAmbientDetails = async () => {
+    if (id) {
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/api/ambientes/${id}`);
+        if (!response.ok) {
+          throw new Error('Erro ao buscar os detalhes do ambiente.');
+        }
+        const jsonData = await response.json();
+        setAmbient(jsonData); // Armazena os dados do ambiente
+      } catch (error) {
+        console.error('Erro ao buscar detalhes do ambiente:', error);
+        setError('Não foi possível carregar os detalhes deste ambiente.');
+      }
+    }
+  };
 
   useEffect(() => {
-    console.log(process.env.APP_URL + "/ambientes");
-    axios
-      .get(process.env.APP_URL + "/ambientes", {
-        // /salas?id=132
-        params: {
-          id: params.id,
-        },
-      })
-      .then((dados) => {
-        setSala(dados.data[0]);
-      })
-      .catch((erro) => {
-        console.log("erro");
-        console.log(erro);
-      });
-  }, [params]);
+    fetchAmbientDetails(); // Chama a API quando o id estiver disponível
+  }, [id]);
+
+  if (error) {
+    return (
+      <div className="container">
+        <h1 className="text-danger">{error}</h1>
+      </div>
+    );
+  }
+
+  if (!ambient) {
+    return (
+      <div className="container">
+        <h1>Carregando...</h1>
+      </div>
+    );
+  }
 
   return (
     <>
       <Menu />
-      <div className="container mt-4 mb-5" style={{ paddingLeft: "6%", paddingRight: "6%" }}>
-        {sala ? (
-          <>
-            <h1>Sala</h1>
-            <div className="row">
-              <div className="col-md-4">
-                {/* <img
-                  style={{
-                    width: '100%'
-                  }}
-                  src={`/imagens/${sala.imagemg}`}
-                /> */}
-              </div>
-              <div className="col-md-6">
-                <h3>{sala.nome}</h3>
-                <p style={{ textDecoration: "line-through" }}>
-                  R$ {sala.tipo}
-                </p>
-                <p style={{ color: "red", fontWeight: "bold" }}>
-                  R$ {sala.status}
-                </p>
+      <div className="container">
+        <h1 className="text-center my-4">Detalhes do Ambiente</h1>
 
-                <form>
-                  <input
-                    type="number"
-                    name="quantidade"
-                    defaultValue={1}
-                    min="1"
-                    required
-                    className="form-control mb-3"
-                  />
+        <div className="mb-5">
+          <h2 className="text-success">{ambient.nome}</h2>
+          <div className="mb-4">
+            {ambient.foto ? (
+              <img
+                src={`http://127.0.0.1:8000/storage/${ambient.foto}`}
+                alt={ambient.nome}
+                className="img-fluid"
+                style={{ maxWidth: '100%', borderRadius: '5px' }}
+              />
+            ) : (
+              <img
+                src="/default-image.jpg"
+                alt={ambient.nome}
+                className="img-fluid"
+                style={{ maxWidth: '100%', borderRadius: '5px' }}
+              />
+            )}
+            <p><strong>Tipo:</strong> {ambient.tipo}</p>
+            <p><strong>Descrição:</strong> {ambient.descricao}</p>
+            <p><strong>Status:</strong> {ambient.status}</p>
+          </div>
 
-                  <button type="submit" className="btn btn-success w-100">
-                    Adicionar ao carrinho
-                  </button>
-                </form>
-              </div>
-            </div>
-          </>
-        ) : (
-          <h2>Nenhuma sala encontrada :/</h2>
-        )}
+          <div className="d-flex">
+            <button className="btn btn-warning me-2" onClick={() => window.history.back()}>
+              Voltar para a lista de ambientes
+            </button>
+          </div>
+        </div>
       </div>
       <Footer />
     </>
   );
-}
+};
+
+export default SalaDetails;

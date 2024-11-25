@@ -4,15 +4,9 @@ const nextConfig = {
         styledComponents: true
     },
     images: {
-        remotePatterns: [
-            {
-                protocol: 'https',
-                hostname: 'raw.githubusercontent.com',
-                port: '',
-                pathname: '/profchines/**',
-            },
-        ],
+        domains: ['127.0.0.1'],  // Adiciona o domínio do seu servidor local
     },
 };
 
 export default nextConfig;
+

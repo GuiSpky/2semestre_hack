@@ -112,7 +112,7 @@ const ReservaPage = () => {
         <div className="row">
           {ambientList.length > 0 ? (
             ambientList.map((ambient: any) => (
-              <div className="col-md-4 mb-4" key={ambient.id}>
+              <div className="col-md-4 mb-4 d-flex justify-content-center" key={ambient.id}>
                 <Card
                   id={ambient.id}
                   nome={ambient.nome}
