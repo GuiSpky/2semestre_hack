@@ -1,5 +1,16 @@
+'use client';
+
+import { Footer } from "@/components/Footer";
+import { MenuAdmin } from "@/components/MenuAdmin";
+
 const Page = () => {
-    return <div>Página de Usuários</div>;
-  };
-  
-  export default Page;
+    return (
+        <>
+            <MenuAdmin />
+            <div>Página de Usuários</div>
+            <Footer />
+        </>
+    );
+};
+
+export default Page;

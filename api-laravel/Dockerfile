@@ -1,30 +1,20 @@
-FROM node:18-alpine AS builder
+# Use uma imagem oficial do PHP como base
+FROM php:8.1-fpm
 
-WORKDIR /app
+RUN apt-get update && apt-get install -y libpng-dev libjpeg-dev libfreetype6-dev zip git libzip-dev libssl-dev libpng16-16 && \
+    docker-php-ext-configure gd --with-freetype --with-jpeg && \
+    docker-php-ext-install gd pdo pdo_mysql zip
 
-COPY package.json package-lock.json ./
+WORKDIR /var/www
 
-RUN npm install
-
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 COPY . .
 
-RUN npm run builder
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
-RUN npm prune --production
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
-FROM node:18-alpine
+EXPOSE 9000
 
-WORKDIR /app
-
-COPY --from=builder /app/package.json ./
-COPY --from=builder /app/package-lock.json ./
-COPY --from=builder /app/node-modules ./node_modules
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/next.config.js ./
-COPY --from=builder /app/public ./public
-
-RUN npm install --only=production
-
-EXPOSE 3030
-
-
+# Iniciar o PHP-FPM
+CMD ["php-fpm"]
