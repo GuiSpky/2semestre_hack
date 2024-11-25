@@ -18,6 +18,8 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 Route::get('/user', [AuthController::class, 'user'])->middleware('auth:sanctum');
 
+
+
 Route::apiResource('/users', UserController::class);
 Route::delete('/users/deletar/{id}', [UserController::class, 'destroy']);
 
