@@ -10,11 +10,11 @@ class AuthController extends Controller
     {
         if(Auth::guard('web')->attempt($request->only('email','password'))){
             $user = Auth::user(); // Obter o usuário autenticado
-            $token = $user->createToken('API Token')->plainTextToken; // Gerar o token Sanctum
+            // $token = $user->createToken('API Token')->plainTextToken; // Gerar o token Sanctum
 
             return response()->json([
                 'message' => 'Login successful',
-                'token' => $token,
+                'token' => $request->user()->createToken('invoice'),
                 'user' => $user,
             ]);
         };
